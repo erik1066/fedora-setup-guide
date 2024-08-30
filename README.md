@@ -22,6 +22,24 @@ fwupdmgr get-updates
 fwupdmgr update
 ```
 
+## Install Zed
+
+**The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2024-08-29**
+
+Zed is a highly-efficient, cross-platform code editor written in Rust.
+
+Run the following command to install Zed:
+
+```bash
+curl https://zed.dev/install.sh | sh
+```
+
+To run Zed after installation, run:
+
+```bash
+zed
+```
+
 ## Install Visual Studio Code
 
 **The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2024-08-29**

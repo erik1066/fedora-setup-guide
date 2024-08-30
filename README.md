@@ -2,6 +2,8 @@
 
 This repository contains instructions to set up Fedora 40 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages. 
 
+> See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
+
 ## Update the OS and install common tools
 
 The first thing you should do is update Fedora:

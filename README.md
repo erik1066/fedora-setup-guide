@@ -84,5 +84,15 @@ See [Customizing Git Configuration](https://www.git-scm.com/book/en/v2/Customizi
 
 > Tip: Remember that you can include a longer commit message by using a second `-m` in your command. Example: `git commit -m "The short message, best ~50 characters" -m "The extended description that can go on however long you want."`
 
+## SSH Keys for GitHub/GitLab
 
+**The instructions for generating SSH keys is derived from https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent. Instructions for adding an SSH key to GitHub is derived from https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account. Both are current as of 2024-08-29**
+
+1. Run `ssh-keygen -t ed25519 -C "your_email@example.com"`
+1. Enter a passphrase
+1. Run `ssh-add ~/.ssh/id_ed25519`
+1. Run `cat ~/.ssh/id_ed25519.pub`
+1. Copy the output from `cat` and paste it into GitLab and GitHub's SSH key sections for your profile
+1. Run `ssh -T git@github.com` to [verify the key is recognized and working with GitHub.com](https://help.github.com/en/github/authenticating-to-github/githubs-ssh-key-fingerprints)
+1. Run `ssh -T git@gitlab.com` to verify the key is recognized and working with GitLab
 

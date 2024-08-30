@@ -10,3 +10,79 @@ The first thing you should do is update Fedora:
 sudo dnf upgrade
 ```
 
+Reboot the system.
+
+Upon logging in again, check for device firmware updates and install those updates by running the following commands:
+
+```bash
+fwupdmgr refresh --force
+fwupdmgr get-updates
+fwupdmgr update
+```
+
+## Install Visual Studio Code
+
+**The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2024-08-29**
+
+1. Run the following commands:
+
+```bash
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+dnf check-update
+sudo dnf install code
+```
+
+2. Launch Visual Studio Code
+1. Navigate **File** > **Preferences** > **Settings** and then type "telemetry"
+1. Select "off" for the **Telemetry Level**
+1. Disable the "Dotnet Acquisition Extension: Enable Telemetry" option
+1. Optional: While still in **Settings**, change the following to "False":
+   1. **Enable Natural Language Search**
+   1. **Enable Experiments**
+1. Optional: While still in **Settings**, enable **Editor: Format on Save**. Turning this setting on is the same as running the **Format Document** command each time you save a file.
+1. Optional: While Visual Studio Code is open, select **Activities**, right-click the Visual Studio Code icon on the dock, and select **Add to favorites**.
+
+The following VS Code extensions are handy:
+
+1. [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform)
+1. [Go](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go)
+1. [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) - syntax highlighting, debugging, test runner support, and intellisense for C#
+1. [Rust-Analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) - Rust language server
+1. [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) - for debugging Rust code on Ubuntu
+1. [Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) - syntax highlighting, debugging, and intellisense for Java, plus unit testing support
+1. [Spring Boot Extension Pack](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-boot-dev-pack) - specific enhancements for working with Spring Boot
+1. [VS Live Share](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare) - allows simultaneous editing of code files by multiple authors, like Google Docs
+1. [Docker](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
+1. [Kubernetes](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools)
+1. [JavaScript Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
+1. [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+1. [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+1. [TSLint](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin)
+1. [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+There are some excellent dark theme alternatives to the VS Code default theme:
+
+1. [One Monokai Theme](https://marketplace.visualstudio.com/items?itemName=azemoh.one-monokai)
+1. [Atom One Dark Theme](https://marketplace.visualstudio.com/items?itemName=akamud.vscode-theme-onedark)
+1. [Material Theme](https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme)
+1. [Blueberry Dark Theme](https://marketplace.visualstudio.com/items?itemName=peymanslh.blueberry-dark-theme)
+1. [Arc+ Theme](https://marketplace.visualstudio.com/items?itemName=ph-hawkins.arc-plus)
+1. [Arc Darker Theme](https://marketplace.visualstudio.com/items?itemName=alvesvaren.arc-dark)
+1. [Neon City](https://marketplace.visualstudio.com/items?itemName=lakshits11.neon-city)
+
+
+## Git configuration
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email yourname@yourdomain.com
+git config --global init.defaultBranch main
+```
+
+See [Customizing Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) for more details. You can edit the global Git config file by running `gedit ~/.gitconfig` in a terminal window.
+
+> Tip: Remember that you can include a longer commit message by using a second `-m` in your command. Example: `git commit -m "The short message, best ~50 characters" -m "The extended description that can go on however long you want."`
+
+
+

@@ -116,3 +116,21 @@ See [Customizing Git Configuration](https://www.git-scm.com/book/en/v2/Customizi
 1. Run `ssh -T git@github.com` to [verify the key is recognized and working with GitHub.com](https://help.github.com/en/github/authenticating-to-github/githubs-ssh-key-fingerprints)
 1. Run `ssh -T git@gitlab.com` to verify the key is recognized and working with GitLab
 
+## .NET
+
+```bash
+sudo dnf install dotnet-sdk-8.0
+```
+
+Run `dotnet --list-sdks` and look for the following output to verify success:
+
+```
+8.0.108 [/usr/lib64/dotnet/sdk]
+```
+
+Opt out of .NET's telemetry:
+
+1. Run `nano ~/.profile`
+1. Type `export DOTNET_CLI_TELEMETRY_OPTOUT=true` at the bottom of the file
+1. Save and exit
+1. Log out and log in again

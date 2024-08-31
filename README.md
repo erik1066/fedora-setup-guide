@@ -141,3 +141,41 @@ Opt out of .NET's telemetry:
 1. Save and exit
 1. Log out and log in again
 
+## Go
+
+**Instructions for installing Go taken from https://go.dev/doc/install on 2024-08-30**
+
+While you _can_ install Go via `dnf`, doing so may install an oudated version. Run the following commands instead, ensuring you replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
+
+```bash
+curl -OL https://golang.org/dl/go1.23.0.linux-amd64.tar.gz
+sha256sum go1.23.0.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf go1.23.0.linux-amd64.tar.gz
+```
+
+If you are upgrading Go, then run the following command to verify success:
+
+```bash
+go version
+```
+
+Look for `go version go1.23.0 linux/amd64` (or newer).
+
+If this is a first-time installation of Go, then running `go version` is likely to display the following output:
+
+```
+bash: go: command not found...
+Packages providing this file are:
+'gcc-go'
+'golang-bin'
+```
+
+You must set the following environment variables to fix the "command not found" problem after the initial Go installation. _You do not need to repeat this step if you're upgrading an existing Go installation._
+
+```bash
+echo "export PATH=$PATH:$(go env GOPATH)/bin:/usr/local/go/bin" >> ~/.profile
+source ~/.profile
+```
+
+Now run `go version` and you should see the expected version number output to the terminal.

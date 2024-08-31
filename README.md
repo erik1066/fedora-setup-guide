@@ -22,6 +22,12 @@ fwupdmgr get-updates
 fwupdmgr update
 ```
 
+Let's next install some common development tools:
+
+```bash
+sudo dnf -y install make
+```
+
 ## Install Zed
 
 **The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2024-08-29**
@@ -134,3 +140,4 @@ Opt out of .NET's telemetry:
 1. Type `export DOTNET_CLI_TELEMETRY_OPTOUT=true` at the bottom of the file
 1. Save and exit
 1. Log out and log in again
+

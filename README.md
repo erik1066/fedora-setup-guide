@@ -230,7 +230,13 @@ Opt out of .NET's telemetry:
 
 **Instructions for installing Go taken from https://go.dev/doc/install on 2024-08-30**
 
-While you _can_ install Go via `dnf`, doing so may install an oudated version. Run the following commands instead, ensuring you replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
+Installing Go can be done using `dnf`:
+
+```bash
+sudo dnf install go
+```
+
+Using `dnf` will likely install a slightly oudated version of Go. You can alternatively run the following commands to install an up-to-date version of Go. Be sure to replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
 
 ```bash
 curl -OL https://golang.org/dl/go1.23.0.linux-amd64.tar.gz
@@ -239,7 +245,7 @@ sudo rm -rf /usr/local/go
 sudo tar -C /usr/local -xzf go1.23.0.linux-amd64.tar.gz
 ```
 
-If you are upgrading Go, then run the following command to verify success:
+If you are upgrading Go using these commands, then run the following command to verify success:
 
 ```bash
 go version
@@ -366,6 +372,116 @@ sudo dnf install awscli
 ```
 
 Run `aws --version` to verify success.
+
+## Set up and connect to a containerized PostgreSQL Server
+
+One can run PostgreSQL in a container rather than installing locally. We can also start a second PostgreSQL container to connect to the first container and run commands.
+
+The advantage to using a second PostgreSQL container to run SQL commands is that we don't need to install PostgreSQL tools locally.
+
+> While Podman and Docker are similar, the rootless nature of Podman containers means the required commands to make container-to-container networking function correctly differ between the two tools. This guide is specific to Podman. Making a similar connection using Docker would require creating a new network in `bridge` mode and setting both containers to use that network, which is not possible in Podman without using rootful containers.
+
+Let's get started.
+
+1. First create a pod:
+
+```bash
+podman pod create --name test-pod1 --share net -p 5432:5432
+```
+
+2. Next, create and run the main PostgreSQL container that you want to use as the database server:
+
+```bash
+podman run --pod test-pod1 --detach --rm --name test-container1 --env POSTGRES_PASSWORD=my-secret-pw postgres:latest
+```
+
+3. Finally, create the second PostgreSQL container that you want to use for issuing commands to the first container:
+
+```bash
+podman run --pod test-pod1 -it --rm --name test-container2 postgres psql -U postgres -h localhost -p 5432 -d postgres
+```
+
+After step 3, you should see a `postgres=#` prompt. Type `SELECT table_name FROM information_schema.tables;` and press **Enter** to verify success. Type `q` to exit the table list view. 
+
+> You can always open Podman Desktop to easily delete pods and containers if you mess things up.
+
+### Connect to the PostgreSQL container from a Go program
+
+[Go PostgreSQL example code](./app-examples/golang-postgres/) is a runnable Go program that should "just work" if you followed the steps above.
+
+```go
+package main
+
+import (
+	"database/sql"
+	"fmt"
+
+	_ "github.com/lib/pq"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "my-secret-pw"
+	dbname   = "postgres"
+)
+
+func main() {
+	// connection string
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	sql := `SELECT datname FROM pg_database`
+	rows, err := db.Query(sql)
+	CheckError(err)
+
+	defer rows.Close()
+	for rows.Next() {
+		var datname string
+
+		err = rows.Scan(&datname)
+		CheckError(err)
+
+		fmt.Println(datname)
+	}
+
+	// close database
+	defer db.Close()
+
+	// check db
+	err = db.Ping()
+	CheckError(err)
+
+	fmt.Println("Connected!")
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+Let's run the Go code example from the `app-examples` folder in this repository:
+
+```bash
+cd ./app-examples/golang-postgres
+go get github.com/lib/pq
+go run .
+```
+
+You should see the following output:
+
+```
+postgres
+template1
+template0
+Connected!
+```
 
 ## KVM + QEMU + VirtManager
 

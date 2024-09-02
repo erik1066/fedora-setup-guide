@@ -485,7 +485,7 @@ Connected!
 
 ## KVM + QEMU + VirtManager
 
-**Instructions derived from https://docs.fedoraproject.org/en-US/quick-docs/virtualization-getting-started/ and https://fedoramagazine.org/full-virtualization-system-on-fedora-workstation-30/
+**Instructions derived from https://docs.fedoraproject.org/en-US/quick-docs/virtualization-getting-started/ and https://fedoramagazine.org/full-virtualization-system-on-fedora-workstation-30/**
 
 We can use Linux's built-in Kernel Virtual Machine (KVM) plus QEMU and VirtManager to build, run, and manage VMs.
 

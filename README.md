@@ -175,6 +175,13 @@ There are some excellent dark theme alternatives to the VS Code default theme:
 1. [Arc Darker Theme](https://marketplace.visualstudio.com/items?itemName=alvesvaren.arc-dark)
 1. [Neon City](https://marketplace.visualstudio.com/items?itemName=lakshits11.neon-city)
 
+## Install Postman
+
+Postman is a complete toolchain for API developers.
+
+```bash
+flatpak install flathub com.getpostman.Postman
+```
 
 ## Git configuration
 

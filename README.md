@@ -179,3 +179,170 @@ source ~/.profile
 ```
 
 Now run `go version` and you should see the expected version number output to the terminal.
+
+## Install and Configure USBGuard
+
+USBGuard enables you to block USB device access. This is useful for protecting against rogue USB devices (think "BadUSB") by implementing a USB blocklist and USB device policy.
+
+> Warning: Installing USBGuard using the steps below will create a policy that allows only currently-connected USB devices to be usable on the next boot. You can and should review this policy right after installation to ensure you can continue to use your PC. For instance, if you use hardware security keys to login, and they were not inserted at the time of USBGuard's installation, you could be locked out of your system permanently. Be cautious.
+
+Let's install USB Guard:
+
+```bash
+sudo dnf install usbguard
+```
+
+You should also consider installing the USB viewer app, though this is optional:
+
+```bash
+sudo dnf install usbview
+```
+<!-- 
+```bash
+sudo apt install usbguard usbutils udisks2 usbview
+``` -->
+
+You can then graphically view USB devices by running:
+
+```bash
+usbview
+```
+
+Or through either of these terminal commands:
+
+```bash
+lsusb
+usb-devices | less
+```
+
+We now need to start and then stop the USB Guard service to populate the `rules.conf` file:
+
+```bash
+sudo systemctl enable usbguard.service --now
+sudo systemctl start usbguard.service
+sudo systemctl stop usbguard.service
+```
+
+Let's now set an initial policy:
+
+```bash
+usbguard generate-policy -X -t reject > /etc/usbguard/rules.conf
+```
+
+Now let's modify these configuration files. Open a root terminal and navigate to the `usbguard` directory:
+
+```bash
+sudo -i
+cd /etc/usbguard
+ls -laF
+```
+
+```
+total 36
+drwxr-xr-x   3 root root  4096 Jun 27 08:36 ./
+drwxr-xr-x 149 root root 12288 Jun 27 08:36 ../
+drwxr-xr-x   2 root root  4096 Jun 25 19:09 IPCAccessControl.d/
+-rw-------   1 root root  4535 Jun 27 08:36 rules.conf
+-rw-------   1 root root  6653 Apr 13  2022 usbguard-daemon.conf
+```
+
+Let's look at the policy:
+
+```bash
+sudo grep -vE '^#|^$' /etc/usbguard/usbguard-daemon.conf
+```
+
+```ini
+RuleFile=/etc/usbguard/rules.conf
+RuleFolder=/etc/usbguard/rules.d/
+ImplicitPolicyTarget=block
+PresentDevicePolicy=apply-policy
+PresentControllerPolicy=keep
+InsertedDevicePolicy=apply-policy
+RestoreControllerDeviceState=false
+DeviceManagerBackend=uevent
+IPCAllowedUsers=root
+IPCAllowedGroups=wheel
+IPCAccessControlFiles=/etc/usbguard/IPCAccessControl.d/
+DeviceRulesWithPort=false
+AuditBackend=FileAudit
+AuditFilePath=/var/log/usbguard/usbguard-audit.log
+HidePII=false
+```
+
+See `ImplicitPolicyTarget=block` on line 3. This line tells the daemon how to treat USB devices that fail to match a rule in the policy. Allowed values are `allow`, `block` or `reject`. A policy of `reject` logically removes the device node from the system.
+
+See `PresentDevicePolicy` on line 4. This line tells the daemon how to treat USB devices that are already connected when the daemon starts. Allowed values are `allow`, `block`, `reject`, `keep` (this maintains the state the device is in) or `apply-policy`. The `apply-policy` default simply means to apply the rules to each USB device.
+
+> You can find further documentation at https://usbguard.github.io/documentation/configuration. 
+
+Let's look at the default policy that was created when we started and then stopped the daemon:
+
+```bash
+sudo nano /etc/usbguard/rules.conf
+```
+
+You should see that all currently connected devices are listed with `allow` as the permission. If you're on a laptop with no devices connected then the file is likely to be empty.
+
+Let's start the daemon and check to see if it's working:
+
+
+```bash
+sudo systemctl restart usbguard.service
+sudo systemctl status usbguard.service
+sudo usbguard list-rules
+```
+
+You can list all USB devices recognized by the daemon:
+
+```bash
+sudo usbguard list-devices
+```
+
+You can verify it's working by plugging in a USB device and running:
+
+```bash
+lsusb
+```
+
+Look for the USB device in the list. It should appear, but it shouldn't work - that is, if you plugged in a USB thumb drive, it shouldn't appear as new storage. Let's confirm by running this command:
+
+```bash
+sudo dmesg | grep -i 'authorized'
+```
+
+If you see the following message or type of message then USBGuard successfully blocked the device:
+
+```
+[xxxxx.xxxxxx] usb x-x.x: Device is not authorized for usage
+```
+
+Let's authorize the device. We first need to find the device id and serial number. Run this command to list all the blocked devices:
+
+```bash
+sudo usbguard list-devices -b
+```
+
+Note the device ID and serial number. You will need these values. Then run the command below. Before doing so, replace the `1234:5678` and `ABCDEF` with the values outputted from the `sudo usbguard list-devices -b` command. Executing this command permanently updates the `rules.conf` with an `allow` rule for that device.
+
+> The `-p` flag is for permanent; leaving it off the command would make this a temporary rule that would not persist across a reboot.
+
+> If your device has no serial number, just leave the serial number empty. Example: `""`
+
+```bash
+sudo usbguard allow-device '1234:5678 serial "ABCDEF"' -p
+```
+
+Restart the USBGuard service:
+
+```bash
+sudo systemctl restart usbguard.service
+```
+
+With your device still plugged in, run:
+
+```bash
+sudo usbguard list-devices -b
+```
+
+If your device does not appear in the list of blocked devices then you've successfully whitelisted it.

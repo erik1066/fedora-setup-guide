@@ -305,6 +305,49 @@ flatpak install flathub io.podman_desktop.PodmanDesktop
 
 You'll be asked to go through a setup process when running Podman Desktop for the first time. Check all 3 boxes. This will install Podman Compose and `kubectl` system-wide.
 
+## Install Kind and Configure with Podman Desktop
+
+In Podman Desktop, find the "Kind" button on the bottom left of the window and select it. A prompt should appear asking if you want to install Kind. Select Yes. Once completed, open a terminal and run the following command to confirm:
+
+```bash
+kind get clusters
+```
+
+You should see this output:
+
+```bash
+enabling experimental podman provider
+No kind clusters found.
+```
+
+Back in **Podman Desktop**, go to **Settings** > **Resources** and find the **Kind** tile. Select **Create new...**. Use these settings:
+
+```
+Name                       kind-cluster
+Provider type:             podman
+HTTP port:                 9090
+HTTPS port:                9443
+Set up ingress controller: Enabled
+Node's container image:    (blank)
+```
+
+The GUI should display "Successful operation" after a few seconds.
+
+Navigate to the **Kubernetes** tab:
+
+![Podman Desktop in the Kubernetes Section of Settings](<./images/podman02.png>)
+
+You should see a Kind cluster running as shown in the image above.
+
+Confirm that your Kubernetes context is set to the local Kind cluster:
+
+```bash
+kubectl config current-context
+```
+
+Observe `kind-kind-cluster` as the output.
+
+
 ## Install and Configure USBGuard
 
 USBGuard enables you to block USB device access. This is useful for protecting against rogue USB devices (think "BadUSB") by implementing a USB blocklist and USB device policy.

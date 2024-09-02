@@ -36,8 +36,6 @@ Tilix may be preferable to the default Gnome terminal:
 sudo dnf install tilix
 ```
 
-## Install Z Shell (ZSH)
-
 ## Z Shell (ZSH)
 
 **Instructions derived from https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH on 2024-09-02**

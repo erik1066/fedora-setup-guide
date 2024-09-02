@@ -237,16 +237,9 @@ cd /etc/usbguard
 ls -laF
 ```
 
-```
-total 36
-drwxr-xr-x   3 root root  4096 Jun 27 08:36 ./
-drwxr-xr-x 149 root root 12288 Jun 27 08:36 ../
-drwxr-xr-x   2 root root  4096 Jun 25 19:09 IPCAccessControl.d/
--rw-------   1 root root  4535 Jun 27 08:36 rules.conf
--rw-------   1 root root  6653 Apr 13  2022 usbguard-daemon.conf
-```
+Look for `rules.conf` and `usbguard-daemon.conf`.
 
-Let's look at the policy:
+Let's look at the USBGuard policy:
 
 ```bash
 sudo grep -vE '^#|^$' /etc/usbguard/usbguard-daemon.conf
@@ -276,7 +269,7 @@ See `PresentDevicePolicy` on line 4. This line tells the daemon how to treat USB
 
 > You can find further documentation at https://usbguard.github.io/documentation/configuration. 
 
-Let's look at the default policy that was created when we started and then stopped the daemon:
+Let's look at the default ruleset that was created when we started and then stopped the daemon:
 
 ```bash
 sudo nano /etc/usbguard/rules.conf

@@ -207,6 +207,18 @@ See [Customizing Git Configuration](https://www.git-scm.com/book/en/v2/Customizi
 1. Run `ssh -T git@github.com` to [verify the key is recognized and working with GitHub.com](https://help.github.com/en/github/authenticating-to-github/githubs-ssh-key-fingerprints)
 1. Run `ssh -T git@gitlab.com` to verify the key is recognized and working with GitLab
 
+## Java
+
+Java is already installed by default on Fedora Workstation. To verify:
+
+```bash
+java -version
+```
+
+Look for an `openjdk version` message to verify success.
+
+See https://docs.fedoraproject.org/en-US/quick-docs/installing-java/ for installing different versions of Java.
+
 ## .NET
 
 ```bash

@@ -277,6 +277,31 @@ sudo dnf install terraform
 
 Run `terraform --version` to verify the installation was a success.
 
+## Podman
+
+**Instructions for installing Podman taken from https://podman.io/docs/installation on 2024-09-02**
+
+Podman is installed by default in Fedora 40 Workstation. To confirm, run:
+
+```bash
+podman run hello-world
+```
+
+If for some reason you don't have Podman installed you can install it using this command:
+
+```bash
+sudo dnf -y install podman
+```
+
+## Podman Desktop
+
+Podman Desktop is an open source graphical tool, much like Docker Desktop. To install:
+
+```bash
+flatpak install flathub io.podman_desktop.PodmanDesktop
+```
+
+You'll be asked to go through a setup process when running Podman Desktop for the first time. Check all 3 boxes. This will install Podman Compose and `kubectl` system-wide.
 
 ## Install and Configure USBGuard
 

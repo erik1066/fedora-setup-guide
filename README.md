@@ -367,6 +367,41 @@ sudo dnf install awscli
 
 Run `aws --version` to verify success.
 
+## KVM + QEMU + VirtManager
+
+**Instructions derived from https://docs.fedoraproject.org/en-US/quick-docs/virtualization-getting-started/ and https://fedoramagazine.org/full-virtualization-system-on-fedora-workstation-30/
+
+We can use Linux's built-in Kernel Virtual Machine (KVM) plus QEMU and VirtManager to build, run, and manage VMs.
+
+```bash
+sudo dnf install @virtualization
+```
+
+Now start the service:
+
+```bash
+sudo systemctl start libvirtd
+```
+
+Start the service on boot by running:
+
+```bash
+sudo systemctl enable libvirtd
+```
+
+Verify success by looking for `kvm_intel` or `kvm_amd` in the following:
+
+```bash
+lsmod | grep kvm
+```
+
+You'll want to administer `libvirt` with the regular user. Otherwise, every time you start `virt-manager` you will need to do so with `sudo` and enter your password.
+
+```bash
+sudo usermod -a -G libvirt $(whoami)
+```
+
+Now log out and log in again.
 
 ## Install and Configure USBGuard
 

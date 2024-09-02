@@ -36,6 +36,78 @@ Tilix may be preferable to the default Gnome terminal:
 sudo dnf install tilix
 ```
 
+## Install Z Shell (ZSH)
+
+## Z Shell (ZSH)
+
+**Instructions derived from https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH on 2024-09-02**
+
+[ZSH](https://en.wikipedia.org/wiki/Z_shell) can be installed by running:
+
+```bash
+sudo dnf install zsh
+```
+
+Run `zsh --version` and look for `zsh 5.9 (x86_64-redhat-linux-gnu)` (or newer) to verify success
+
+To set `zsh` as the default shell, run:
+
+```bash
+chsh -s $(which zsh)
+```
+
+Start a new session. ZSH is now your default shell.
+
+### Optional: Install Oh-My-ZSH for ZSH configuration management
+[Oh-My-ZSH](https://github.com/ohmyzsh/ohmyzsh) is an excellent tool for managing your ZSH configuration. Install it using the following command:
+
+```bash
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+An "Oh My Zsh!... is now installed!" message should appear in the terminal output.
+
+> You may be prompted to set ZSH as your default shell.
+
+### Optional: Enable ZSH syntax highlighting
+Install syntax highlighting for ZSH by running:
+
+```bash
+sudo dnf install zsh-syntax-highlighting
+```
+
+Now run:
+
+```bash
+echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+```
+
+### Optional: Change ZSH theme using Oh-My-ZSH
+
+Oh-My-ZSH is installed with [several themes](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes). Let's change the default theme to `blinks` by first opening the `.zshrc` file:
+
+```bash
+sudo nano ~/.zshrc
+```
+
+Find the line `ZSH_THEME="robbyrussell"` and change it to `ZSH_THEME="blinks"` and save. The new theme will be applied to new terminal windows.
+
+### Optional: Enable ZSH plugins
+
+Plugins add functionality to ZSH. Let's enable some [pre-installed plugins](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) for a few programming languages. First, open the `.zshrc` file:
+
+```bash
+sudo nano ~/.zshrc
+```
+
+Find the line `plugins=(git)` and change it to include your preferred plugins. An example:
+
+```
+plugins=(git dotnet rust golang mvn npm terraform aws gradle)
+```
+
+Save the file. The plugins will be applied to new terminal windows.
+
 ## Install Zed
 
 **The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2024-08-29**

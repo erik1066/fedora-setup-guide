@@ -265,6 +265,19 @@ source ~/.profile
 
 Now run `go version` and you should see the expected version number output to the terminal.
 
+## Terraform
+
+**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/cli/install/yum on 2024-09-02**
+
+
+```bash
+sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+sudo dnf install terraform
+```
+
+Run `terraform --version` to verify the installation was a success.
+
+
 ## Install and Configure USBGuard
 
 USBGuard enables you to block USB device access. This is useful for protecting against rogue USB devices (think "BadUSB") by implementing a USB blocklist and USB device policy.

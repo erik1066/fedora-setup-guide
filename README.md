@@ -28,6 +28,14 @@ Let's next install some common development tools:
 sudo dnf -y install make
 ```
 
+## Install Tilix
+
+Tilix may be preferable to the default Gnome terminal:
+
+```bash
+sudo dnf install tilix
+```
+
 ## Install Zed
 
 **The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2024-08-29**

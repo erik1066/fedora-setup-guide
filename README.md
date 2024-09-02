@@ -295,7 +295,9 @@ sudo dnf -y install podman
 
 ## Podman Desktop
 
-Podman Desktop is an open source graphical tool, much like Docker Desktop. To install:
+![Podman Desktop](<./images/podman01.png>)
+
+Podman Desktop is an open source graphical tool for managing containers locally, much like Docker Desktop. To install:
 
 ```bash
 flatpak install flathub io.podman_desktop.PodmanDesktop

@@ -347,6 +347,16 @@ kubectl config current-context
 
 Observe `kind-kind-cluster` as the output.
 
+## Helm
+
+If you followed along with the Podman Desktop installation instructions, you now have a Kubernetes Cluster (via Kind) and `kubectl` installed. Let's now install Helm.
+
+```bash
+sudo dnf install helm
+```
+
+Run `helm version` to verify success.
+
 
 ## Install and Configure USBGuard
 

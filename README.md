@@ -403,6 +403,27 @@ sudo usermod -a -G libvirt $(whoami)
 
 Now log out and log in again.
 
+### Create a new VM using `virt-manager`
+1. Download the [Fedora Silverblue](https://fedoraproject.org/atomic-desktops/silverblue/download/) ISO or the ISO of your choice
+1. Place the `.iso` file into the `/var/lib/libvirt/images` folder:
+
+```bash
+cd ~/Downloads
+sudo mv Fedora-Silverblue-ostree-x86_64-40-1.14.iso /var/lib/libvirt/images
+```
+
+3. Open the **Virtual Machine Manager** (aka `virt-manager`)
+1. Add a new virtual machine. Note that if you get a connection error, you should reboot your machine.
+1. Select **Local install media** and then **Forward**. Step 2 of 5 appears.
+1. Select **Browse**. The ISO you copied into the `/var/lib/libvirt/images` folder should appear.
+1. Select the ISO and choose **Choose Volume**
+1. You  may need to select an operating system. if Virtual Machine Manager couldn't auto-detect one based on the ISO. In our case, using Fedora Silverblue, "Fedora Silverblue 40" is auto-detected and we can skip manual OS selection.
+1. Select **Forward**
+1. Choose at least "8192" for memory and 2 CPUs and then select **Forward**
+1. Choose at least 25 GB of disk storage and select **Forward**
+1. Use a distinctive name for the VM and select **Finish**
+1. The VM should start automatically. Go through the VM setup process.
+
 ## Install and Configure USBGuard
 
 USBGuard enables you to block USB device access. This is useful for protecting against rogue USB devices (think "BadUSB") by implementing a USB blocklist and USB device policy.

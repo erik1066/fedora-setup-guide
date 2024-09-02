@@ -424,6 +424,38 @@ sudo mv Fedora-Silverblue-ostree-x86_64-40-1.14.iso /var/lib/libvirt/images
 1. Use a distinctive name for the VM and select **Finish**
 1. The VM should start automatically. Go through the VM setup process.
 
+## Firefox
+
+See https://wiki.mozilla.org/Privacy/Privacy_Task_Force/firefox_about_config_privacy_tweeks for advanced privacy-related Firefox configuration options.
+
+This Fedora 40 Setup Guide does _not_ list all the options on the site above. It's recommended you visit that site and decide on each option for yourself. However, a few privacy tweaks are important enough that they are worth mentioning here.
+
+Open `about:config` in your Firefox URL bar and accept the warning to proceed with making these privacy tweaks.
+
+```
+dom.private-attribution.submission.enabled = false
+```
+
+Attribution is a way to track whether ads served to you were effective in getting you to buy something. More information is available at https://github.com/mozilla/explainers/tree/main/ppa-experiment. The above command disables this feature.
+
+```
+privacy.resistFingerprinting = true
+```
+
+This setting improves your defenses against [browser fingerprinting](https://coveryourtracks.eff.org/learn).
+
+```
+dom.event.clipboardevents.enabled = false
+```
+
+This setting prevents websites from knowing if you used copy or paste commands and what part of the page you had selected when you used those commands.
+
+```
+webgl.disabled = true
+```
+
+This command disables WebGL. If you never visit sites with WebGL content then it can be safely disabled.
+
 ## Install and Configure USBGuard
 
 USBGuard enables you to block USB device access. This is useful for protecting against rogue USB devices (think "BadUSB") by implementing a USB blocklist and USB device policy.

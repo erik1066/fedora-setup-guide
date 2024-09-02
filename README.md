@@ -540,6 +540,20 @@ sudo mv Fedora-Silverblue-ostree-x86_64-40-1.14.iso /var/lib/libvirt/images
 1. Use a distinctive name for the VM and select **Finish**
 1. The VM should start automatically. Go through the VM setup process.
 
+### Adjusting screen size
+
+On 4K monitors the VM image may be tiny. You can use a `virt-manager` setting to try and adjust this:
+
+1. Select **View**
+1. Select **Scale Display**
+1. Check the box titled **Auto resize VM with window**.
+
+### Taking snapshots
+
+Snapshots can be taken in `virt-manager` just like in Virtual Box. You must navigate into the VM window (not the Virtual Machine Manager window) and select the Manage VM Snapshots icon at the far right of the toolbar. 
+
+The button to create a snapshot is the **+** (plus) symbol on the bottom left of the window.
+
 ## Firefox
 
 See https://wiki.mozilla.org/Privacy/Privacy_Task_Force/firefox_about_config_privacy_tweeks for advanced privacy-related Firefox configuration options.

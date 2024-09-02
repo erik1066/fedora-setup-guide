@@ -357,6 +357,16 @@ sudo dnf install helm
 
 Run `helm version` to verify success.
 
+## AWS CLI Tools
+
+Fedora has a package for AWS CLI tooling:
+
+```bash
+sudo dnf install awscli
+```
+
+Run `aws --version` to verify success.
+
 
 ## Install and Configure USBGuard
 

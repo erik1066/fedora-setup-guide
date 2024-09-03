@@ -495,6 +495,57 @@ template0
 Connected!
 ```
 
+## Dev Containers
+
+Dev Containers are a way to containerize your development environment. They make your development setup portable and consistent.
+
+However, one thing we must do is configure the Dev Containers VSCode extension to use Podman instead of Docker. This is because the Dev Containers extension assumes you have Docker, but the Fedora Setup guide is using Podman instead. If you've followed along with this guide, how would you go about configuring this?
+
+1. First, get the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension for Visual Studio Code.
+
+1. Open **File** > **Preferences** > **Settings** in Visual Studio Code.
+
+1. Type "Dev Containers" into the **Settings** search box.
+
+1. Change **Dev > Containers: Docker Compose Path** to `podman compose`
+
+1. Change **Dev > Containers: Docker Path** to `podman`
+
+1. Change **Dev > Containers: Docker Socket Path** to `unix:///run/user/1000/podman/podman.sock`.
+
+This is also a good time to update your Docker VSCode extension settings to work with Podman:
+
+7. Type "Docker" into the **Settings** search box.
+
+8. Change **Docker: Docker Path** to `podman`.
+
+9. Change **Docker: Docker Compose Path** to `podman compose`.
+
+10. Add a new environment variable to **Docker: Environment** with item = `DOCKER_HOST` and value = `unix:///run/user/1000/podman/podman.sock`.
+
+Now let's look at an example `devcontainer.json` file that might appear in a repository:
+
+```json
+{
+	"name": "name here",
+	"image": "path-to-image-here",
+	"containerUser": "vscode",
+	"updateRemoteUserUID": true,
+	"containerEnv": {
+		"HOME": "/home/vscode"
+	},
+	"runArgs": [
+		"--userns=keep-id:uid=1000,gid=1000"
+	]
+}
+```
+
+Setting `containerUser` to "vscode" ensures that the container uses the `vscode` user to create workspaces. Otherwise, the container might try to create workspaces under `/root`, which will fail in Podman.
+
+This ensures that the `vscode` user is really mapped inside of the container, and it also ensures that `vscode`'s HOME is set explicitly.
+
+> You may still run into trouble with DevContainers using these steps above. Most DevContainer examples assume you're running rootful containers under Docker and _not_ rootless containers in Podman.
+
 ## KVM + QEMU + VirtManager
 
 **Instructions derived from https://docs.fedoraproject.org/en-US/quick-docs/virtualization-getting-started/ and https://fedoramagazine.org/full-virtualization-system-on-fedora-workstation-30/**

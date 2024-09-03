@@ -808,3 +808,18 @@ sudo usbguard list-devices -b
 ```
 
 If your device does not appear in the list of blocked devices then you've successfully whitelisted it.
+
+## Useful Gnome Keyboard Shortcuts
+
+Lastly, let's cover some useful keyboard shortcuts for Gnome. You can find a full list at https://help.gnome.org/users/gnome-help/stable/shell-keyboard-shortcuts.html.en, but a subset are called out here, especially for those switching from other distros or from Windows.
+
+| Key Combo       | Action                     |
+| --------------- | -------------------------- |
+| `Super` + `TAB` | Switches between windows, much like `ALT` + `TAB` in Windows. Caveat: If you have multiple windows of the same app (e.g. two Firefox windows), this key combo won't switch between them. You'll need to use the down arrow key to expand the 'Firefox' selection into its list of windows, then use the left/right arrow keys to select the window you want. |
+| `ALT` + `ESC`   | Switches between windows in the current workspace. Unlike `Super` + `TAB`, this does switch between different windows for the same app. |
+ `Super` + `A`    | Shows the list of applications. |
+ `Super` + `L`    | Locks the screen. Same behavior as Windows. |
+ `Super` + `V`    | Shows the notification screen, including the calendar. Press again to make it disappear. |
+ `ALT` + `F2`     | Run a command. |
+ `ALT` + `Prnt Scrn`     | Take a screenshot of the active window. |
+ `Shift` + `Prnt Scrn`   | Take a screenshot of a screen area. |

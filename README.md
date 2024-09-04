@@ -401,6 +401,20 @@ sudo dnf install awscli
 
 Run `aws --version` to verify success.
 
+## Azure CLI tools
+
+The simplest way to install the [Azure CLI](https://packages.fedoraproject.org/pkgs/azure-cli/azure-cli/) tools:
+
+```bash
+sudo dnf install azure-cli
+```
+
+Verify success by running `az --version`. Note that installing via `dnf` will install an older version of the Azure CLI tools. 
+
+You cannot run `az upgrade` to upgrade the Azure CLI tools when they were installed using `dnf`.
+
+See [Install Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=dnf) for alternative installation methods that will ensure newer versions are installed.
+
 ## Set up and connect to a containerized PostgreSQL Server
 
 One can run PostgreSQL in a container rather than installing locally. We can also start a second PostgreSQL container to connect to the first container and run commands.

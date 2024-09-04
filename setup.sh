@@ -1,11 +1,10 @@
 #!/bin/bash
 
-
 ###########################
 # Update the system
 ###########################
 
-sudo dnf upgrade
+sudo dnf -y upgrade
 
 
 ###########################
@@ -30,6 +29,7 @@ sudo dnf -y install zsh
 chsh -s $(which zsh)
 sudo dnf -y install zsh-syntax-highlighting
 echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+
 
 ###########################
 # Install Zed Editor
@@ -100,6 +100,13 @@ sudo dnf -y install helm
 ###########################
 
 sudo dnf -y install awscli
+
+
+###########################
+# Install Azure CLI Tools
+###########################
+
+sudo dnf -y install azure-cli
 
 
 ###########################

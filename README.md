@@ -28,6 +28,16 @@ Let's next install some common development tools:
 sudo dnf -y install make
 ```
 
+## Install Gnome Tweaks
+
+Install Gnome Tweaks:
+
+```bash
+sudo dnf -y install gnome-tweaks
+```
+
+Gnome Tweaks will let you add minimize and maximize buttons to windows, change fonts, modify font rendering behavior, and alter the appearance of the UI.
+
 ## Install Tilix
 
 Tilix may be preferable to the default Gnome terminal:

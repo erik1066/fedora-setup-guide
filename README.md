@@ -863,3 +863,18 @@ Lastly, let's cover some useful keyboard shortcuts for Gnome. You can find a ful
  `ALT` + `F2`     | Run a command. |
  `ALT` + `Prnt Scrn`     | Take a screenshot of the active window. |
  `Shift` + `Prnt Scrn`   | Take a screenshot of a screen area. |
+
+## Install Fonts
+
+The easiest way to install a font is to download it, extract the contents, and then double-click on the `.ttf` file. This opens Gnome Font Viewer. In the Gnome Font Viewer window, select the blue **Install** button to install the font.
+
+Alternatively, fonts can be installed by downloading a font and placing it into a ffont family older inside of `/.local/share/fonts`. 
+
+Let's walk through what this would look like. First, download the [Inter font from Google Fonts](https://fonts.google.com/specimen/Inter) to your `/Downloads` folder.
+
+```bash
+mkdir -p ~/.local/share/fonts/Inter
+cd ~/Downloads
+unzip Inter.zip -d Inter/
+cp ~/Downloads/Inter-VariableFont_opsz,wght.ttf ~/.local/share/fonts/Inter
+```

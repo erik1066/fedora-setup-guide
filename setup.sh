@@ -8,6 +8,13 @@ sudo dnf -y upgrade
 
 
 ###########################
+# Install Gnome Tweaks
+###########################
+
+sudo dnf -y install gnome-tweaks
+
+
+###########################
 # Install common tools
 ###########################
 

@@ -233,6 +233,28 @@ See [Customizing Git Configuration](https://www.git-scm.com/book/en/v2/Customizi
 1. Run `ssh -T git@github.com` to [verify the key is recognized and working with GitHub.com](https://help.github.com/en/github/authenticating-to-github/githubs-ssh-key-fingerprints)
 1. Run `ssh -T git@gitlab.com` to verify the key is recognized and working with GitLab
 
+## GPG Keys for Signing Commmits and Tags
+
+**The instructions for generating GPG keys is derived from https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key. Instructions for adding a GPG key to GitHub is derived from https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account. Both are current as of 2024-09-12**
+
+1. Run `gpg --full-generate-key`
+1. Choose "RSA and RSA (default)"
+1. Choose 4096 bits
+1. Choose a timeframe of your choice. It's recommended not to set an expiration.
+1. When providing an email, it is recommended to use your `noreply@github.com` email address.
+1. Provide a secure passphrase.
+1. Run:
+
+```bash
+gpg --list-secret-keys --keyid-format=long
+```
+
+8. From the list of GPG keys, copy the long form of the GPG key ID you'd like to use. E.g. `8FF7C99772967AA3`:
+1. Run `gpg --armor --export 8FF7C99772967AA3`, replacing the GPG key ID with the ID produced from step 8.
+1. Copy your GPG key, beginning with `-----BEGIN PGP PUBLIC KEY BLOCK-----` and ending with `-----END PGP PUBLIC KEY BLOCK-----`.
+1. Add the GPG key to your GitHub account.
+
+
 ## Java
 
 Java is already installed by default on Fedora Workstation. To verify:

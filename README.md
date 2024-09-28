@@ -193,12 +193,15 @@ To see which VSCode extensions are installed:
 code --list-extensions
 ```
 
-You can install VSCode extensions from the terminal, too. Run the following commands to install HashiCorp's Terraform extension, Google's Go extension, and Microsoft's Docker extension:
+You can install VSCode extensions from the terminal, too. Run the following commands to install HashiCorp's Terraform extension, Google's Go extension, Microsoft's Docker extension, and a few others:
 
 ```bash
 code --install-extension HashiCorp.terraform
 code --install-extension golang.Go
 code --install-extension ms-azuretools.vscode-docker
+code --install-extension vscjava.vscode-java-pack
+code --install-extension ms-python.python
+code --install-extension ms-dotnettools.csdevkit
 ```
 
 ## Install Postman

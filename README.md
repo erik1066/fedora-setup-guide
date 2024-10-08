@@ -204,6 +204,20 @@ code --install-extension ms-python.python
 code --install-extension ms-dotnettools.csdevkit
 ```
 
+## Install JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
+
+**The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox and are current as of 2024-10-08**
+
+1. Visit https://www.jetbrains.com/toolbox/app/ and download the JetBrains Toolbox app.
+1. Run the following command, replacing the build number in the script below with the build number of the file name you downloaded:
+
+```bash
+tar -xzf jetbrains-toolbox-<build>.tar.gz && cd jetbrains-toolbox-<build> && ./jetbrains-toolbox
+```
+
+3. Select the product that you want to install.
+4. Pin the Toolbox app to the Dash.
+
 ## Install Postman
 
 Postman is a complete toolchain for API developers.

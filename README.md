@@ -1,6 +1,6 @@
-# Fedora 40 Setup Guide
+# Fedora 41 Setup Guide
 
-This repository contains instructions to set up Fedora 40 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages. 
+This repository contains instructions to set up Fedora 41 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages. 
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
@@ -667,7 +667,7 @@ Now log out and log in again.
 
 ```bash
 cd ~/Downloads
-sudo mv Fedora-Silverblue-ostree-x86_64-40-1.14.iso /var/lib/libvirt/images
+sudo mv Fedora-Silverblue-ostree-x86_64-41-1.4.iso /var/lib/libvirt/images
 ```
 
 3. Open the **Virtual Machine Manager** (aka `virt-manager`)
@@ -729,6 +729,8 @@ webgl.disabled = true
 This command disables WebGL. If you never visit sites with WebGL content then it can be safely disabled.
 
 ## Install and Configure USBGuard
+
+> Enabling USBGuard in Fedora 41 may cause the OS to hard-lock on reboot or power off and prevent virtual machines from starting. This section will be updated with more details as they become available.
 
 USBGuard enables you to block USB device access. This is useful for protecting against rogue USB devices (think "BadUSB") by implementing a USB blocklist and USB device policy.
 

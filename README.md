@@ -344,6 +344,54 @@ node app.js
 
 Look for `Hello, world!` in the terminal output to verify success. If all of the above steps work without producing errors, then TypeScript is successfully installed _at the project level_ in your `typescript-test` folder. 
 
+
+### Project creation using tsc
+
+When in `typescript-test`, we can alternativey run:
+
+```bash
+npx tsc --init
+```
+
+This command creates a `tsconfig.json` file with `strict` mode turned on by default, which is recommended for new TypeScript projects.
+
+### TypeScript configuration
+
+Remember that `tsconfig.ts` controls important behaviors of TypeScript. Some settings might be desirable for new TypeScript projects:
+
+```json
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+    }
+}
+```
+
+For example, with `strictNullChecks` set to `true`, this code is invalid:
+
+```ts
+const x: number = null; 
+// invalid; can't assign null to a number type
+```
+
+The following code resolves the issue via the addition of `| null` to the type definition:
+
+```ts
+const x: number | null = null;
+// valid when strictNullChecks is true
+```
+
+With `strictNullChecks` turned on we may need to also check for nulls explicity before using object properties, like such:
+
+```ts
+if (element) {
+  element.textContent = 'Hello, World!';
+}
+```
+
+> It's recommended to create new projects with `npx tsc --init` which sets the `strict` flag to `true` by default.
+
 ## .NET
 
 ```bash

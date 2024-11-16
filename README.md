@@ -314,6 +314,36 @@ v22.11.0
 10.9.0
 ```
 
+## TypeScript
+
+Once you've installed **NodeJS** using the commands from the prior section, you can install TypeScript into a specific project. 
+
+> It's not recommended to install TypeScript globally, though you can via `dnf`.
+
+```bash
+# Create a new folder
+mkdir typescript-test
+cd typescript-test
+touch app.ts
+nano app.ts
+```
+
+Add the following to `app.ts`, :
+
+```ts
+let message: string = "Hello, world!";
+console.log(message);
+```
+
+Back in the terminal session, run:
+
+```bash
+npx tsc app.ts
+node app.js
+```
+
+Look for `Hello, world!` in the terminal output to verify success. If all of the above steps work without producing errors, then TypeScript is successfully installed _at the project level_ in your `typescript-test` folder. 
+
 ## .NET
 
 ```bash

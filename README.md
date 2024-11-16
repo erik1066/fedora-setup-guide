@@ -4,6 +4,16 @@ This repository contains instructions to set up Fedora 41 Workstation for develo
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
+## Check Fedoria Version
+
+Let's make sure we're on Fedora 41, which is the version of Fedora this setup guide is written for:
+
+```bash
+cat /etc/fedora-release
+```
+
+The terminal output should display `Fedora release 41 (Forty One)`.
+
 ## Update the OS and install common tools
 
 The first thing you should do is update Fedora:

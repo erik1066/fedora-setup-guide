@@ -74,6 +74,13 @@ flatpak install flathub com.getpostman.Postman
 
 
 ###########################
+# Install NodeJS and NPM
+###########################
+
+sudo dnf -y install nodejs
+
+
+###########################
 # Install .NET SDK 8.0
 ###########################
 

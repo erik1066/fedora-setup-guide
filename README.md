@@ -294,6 +294,26 @@ Look for an `openjdk version` message to verify success.
 
 See https://docs.fedoraproject.org/en-US/quick-docs/installing-java/ for installing different versions of Java.
 
+## NodeJS
+
+```bash
+sudo dnf install nodejs
+```
+
+To verify:
+
+```bash
+node -v
+npm -v
+```
+
+Check for the following outputs:
+
+```
+v22.11.0
+10.9.0
+```
+
 ## .NET
 
 ```bash

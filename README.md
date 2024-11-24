@@ -364,7 +364,7 @@ Remember that `tsconfig.ts` controls important behaviors of TypeScript. Some set
 {
     "compilerOptions": {
         "noImplicitAny": true,
-        "strictNullChecks": true,
+        "strictNullChecks": true
     }
 }
 ```
@@ -392,6 +392,31 @@ if (element) {
 ```
 
 > It's recommended to create new projects with `npx tsc --init` which sets the `strict` flag to `true` by default.
+
+### TypeScript debugging in VSCode
+
+To debug TS in VSCode, edit your `tsconfig.json` and ensure `sourceMap` is set to `true`:
+
+```json
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+		"sourceMap": true
+    }
+}
+```
+
+Run the following command in your terminal session:
+
+```bash
+npx tsc
+```
+
+Notice there's an `app.js.map` file in addition to `app.js`. 
+
+In Visual Studio Code, open the **Run and Debug** pane, set a breakpoint in `app.ts`, and then select **Run and Debug** on the left side of the window. The breakpoint is hit successfully.
+
 
 ## .NET
 
@@ -548,6 +573,29 @@ sudo dnf install helm
 ```
 
 Run `helm version` to verify success.
+
+## Unity 6 Game Editor
+
+**Instructions for installing Unity Hub taken from https://docs.unity3d.com/hub/manual/InstallHub.html#install-hub-linux on 2024-11-24**
+
+Run the following command to add the Unity Hub repo:
+
+```bash
+sudo sh -c 'echo -e "[unityhub]\nname=Unity Hub\nbaseurl=https://hub.unity3d.com/linux/repos/rpm/stable\nenabled=1\ngpgcheck=1\ngpgkey=https://hub.unity3d.com/linux/repos/rpm/stable/repodata/repomd.xml.key\nrepo_gpgcheck=1" > /etc/yum.repos.d/unityhub.repo'
+```
+
+Update the package cache and install:
+
+```bash
+sudo yum check-update
+sudo yum install unityhub
+```
+
+You can now run the **Unity Hub** app. Once logged in, select **Install Unity Editor**.
+
+In the **Unity Hub**, be sure to navigate to **Preferences** > **Privacy** and opt out of "Analytics". It is opt-in by default.
+
+> Removing Unity Hub can be done by running `$ sudo yum remove unityhub`
 
 ## AWS CLI Tools
 

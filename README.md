@@ -597,6 +597,31 @@ In the **Unity Hub**, be sure to navigate to **Preferences** > **Privacy** and o
 
 > Removing Unity Hub can be done by running `$ sudo yum remove unityhub`
 
+### Fixing SHA1-related license issues in Unity Hub
+
+**Instructions taken from https://discussions.unity.com/t/can-not-activate-license-in-unity-hub-on-fedora-41-rhel9-until-trust-sha-1/1520652/17 on 2024-12-01**
+
+Fedora 41 no longer allows SHA-1. This means SHA-1-based Unity licenses cannot be activated. Rather than displaying an error, however, the license process in Unity Hub fails without any messages as to why. This can lead users down a long road of troubleshooting things and ultimately wastes time.
+
+Fixing this involves updating Fedora's crypto policies to allow SHA-1, which unfortunately, can be a degradation of system security. Thankfully we can isolate the allowed use of SHA-1 to just Unity Hub:
+
+```bash
+sudo update-crypto-policies --set DEFAULT:SHA1
+cp /etc/crypto-policies/back-ends/opensslcnf.config ~/my-insecure-unity-opensslcnf.config
+sudo update-crypto-policies --set DEFAULT
+```
+
+The above commands create a crypto policy config file that allows SHA-1. The default system-wide crypto policy is not permanently altered. You can run Unity with this new policy applied by running:
+
+```bash
+OPENSSL_CONF=~/my-insecure-unity-opensslcnf.config unityhub
+```
+
+> You _can_ run `sudo update-crypto-policies --set DEFAULT:SHA1` and not deal with the configuration file if you don't mind the security implications.
+
+This section will be updated if and when Unity adopts an algorithm that no longer runs afoul of Fedora's default crypto policies.
+
+
 ## AWS CLI Tools
 
 Fedora has a package for AWS CLI tooling:

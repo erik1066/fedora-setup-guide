@@ -701,7 +701,12 @@ Microsoft SQL Server 2022 (RTM-CU17) (KB5048038) - 16.0.4175.1 (X64)
 
 5. Use `EXIT` or `QUIT` to terminate the session, which also terminates the 2nd container entirely. You'll still need to tear down the first container.
 
-### Optional: Install Azure Data Studio for Microsoft SQL Server
+### Connect to the MSSQL container from a Go program
+
+[Go MSSQL example code](./app-examples/golang-mssql/) is a runnable Go program that should "just work" if you followed the steps above.
+
+
+### Install Azure Data Studio for Microsoft SQL Server
 
 **Instructions derived from https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?tabs=linux-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall#tabpanel_1_linux-install**
 

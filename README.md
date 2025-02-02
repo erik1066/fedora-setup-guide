@@ -180,6 +180,7 @@ The following VS Code extensions are handy:
 1. [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
 1. [Kubernetes](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools)
 1. [JavaScript Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
+1. [Microsoft SQL Server](https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql)
 1. [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 1. [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 1. [TSLint](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin)
@@ -213,6 +214,7 @@ code --install-extension ms-azuretools.vscode-docker
 code --install-extension vscjava.vscode-java-pack
 code --install-extension ms-python.python
 code --install-extension ms-dotnettools.csdevkit
+code --install-extension ms-mssql.mssql
 ```
 
 ## Install JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)

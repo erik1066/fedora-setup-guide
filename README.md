@@ -671,14 +671,6 @@ podman pod create --name test-pod-mssql --share net -p 1433:1433
 3. Next, create and run the main MSSQL container that you want to use as the database server:
 
 ```bash
-podman run --env "ACCEPT_EULA=Y" --env "MSSQL_SA_PASSWORD=my-secret-pw" \
-   --pod test-pod-mssql \
-   # -p 1433:1433 \
-   --name sql1 --hostname sql1 \
-   --detach \
-   --rm \
-   mcr.microsoft.com/mssql/server:2022-latest
-# podman run --pod test-pod-mssql --detach --rm --name test-container-mssql --env POSTGRES_PASSWORD=my-secret-pw postgres:latest
 podman run --env "ACCEPT_EULA=Y" --env "MSSQL_SA_PASSWORD=my-secret-pw-12345" --pod test-pod-mssql --name sql1 --hostname sql1 --detach --rm mcr.microsoft.com/mssql/server:2022-latest
 ```
 
@@ -708,6 +700,41 @@ Microsoft SQL Server 2022 (RTM-CU17) (KB5048038) - 16.0.4175.1 (X64)
 ```
 
 5. Use `EXIT` or `QUIT` to terminate the session, which also terminates the 2nd container entirely. You'll still need to tear down the first container.
+
+### Optional: Install Azure Data Studio for Microsoft SQL Server
+
+**Instructions derived from https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?tabs=linux-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall#tabpanel_1_linux-install**
+
+Azure Data Studio is a cross-platform alternative to Microsoft SQL Server Management Studio (SSMS). It's absent some key features of SSMS, especially those related to database administration.
+
+![Azure Data Studio](<./images/azure-data-studio-01.png>)
+
+Flatpaks or store options to download and install Azure Data Studio are unavailable at the time of writing. We'll use Microsoft's instructions to get it running on Fedora:
+
+1. First, download the [.tar.gz](https://azuredatastudio-update.azurewebsites.net/latest/linux-x64/stable) file.
+1. Run the following commands, replacing `<version string>` and `<your username>`.
+
+```bash
+cd ~
+cp ~/Downloads/azuredatastudio-linux-<version string>.tar.gz ~
+tar -xvf ~/azuredatastudio-linux-<version string>.tar.gz
+echo 'export PATH="$PATH:/home/<your username>/azuredatastudio-linux-x64"' >> ~/.profile
+source ~/.profile
+```
+
+3. Run:
+
+```bash
+azuredatastudio
+```
+
+Or:
+
+```bash
+~/azuredatastudio-linux-x64/azuredatastudio
+```
+
+4. Turn off telemetry by navigating to **File** > **Preferences** > **Settings** and searching for "Telemetry", then disabling telemetry for all settings that appeear in the search results.
 
 
 ## Set up and connect to a containerized PostgreSQL Server

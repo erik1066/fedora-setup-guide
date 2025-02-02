@@ -20,6 +20,8 @@ var (
 )
 
 func main() {
+	fmt.Printf("Starting program to print all MSSQL schemas:\n\n")
+
 	flag.Parse()
 
 	if *debug {
@@ -43,21 +45,28 @@ func main() {
 
 	defer conn.Close()
 
-	stmt, err := conn.Prepare("select 1, 'abc'")
+	stmt, err := conn.Prepare("SELECT name FROM sys.schemas")
 	if err != nil {
 		log.Fatal("Prepare failed:", err.Error())
 	}
 	defer stmt.Close()
 
-	row := stmt.QueryRow()
-	var somenumber int64
-	var somechars string
-	err = row.Scan(&somenumber, &somechars)
+	rows, err := stmt.Query()
 	if err != nil {
-		log.Fatal("Scan failed:", err.Error())
+		log.Fatal("Query failed:", err.Error())
 	}
-	fmt.Printf("Number: %d\n", somenumber)
-	fmt.Printf("Characters: %s\n", somechars)
+	defer rows.Close()
 
-	fmt.Printf("Ending program\n")
+	for rows.Next() {
+		var schemaName string
+
+		err = rows.Scan(&schemaName)
+		if err != nil {
+			log.Fatal("Row scan failed:", err.Error())
+		}
+
+		fmt.Println(schemaName)
+	}
+
+	fmt.Printf("\nEnding program\n")
 }

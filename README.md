@@ -1,6 +1,6 @@
 # Fedora 41 Setup Guide
 
-This repository contains instructions to set up Fedora 41 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages. 
+This repository contains instructions to set up Fedora 41 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
@@ -317,7 +317,7 @@ v22.11.0
 
 ## TypeScript
 
-Once you've installed **NodeJS** using the commands from the prior section, you can install TypeScript into a specific project. 
+Once you've installed **NodeJS** using the commands from the prior section, you can install TypeScript into a specific project.
 
 > It's not recommended to install TypeScript globally, though you can via `dnf`.
 
@@ -343,7 +343,7 @@ npx tsc app.ts
 node app.js
 ```
 
-Look for `Hello, world!` in the terminal output to verify success. If all of the above steps work without producing errors, then TypeScript is successfully installed _at the project level_ in your `typescript-test` folder. 
+Look for `Hello, world!` in the terminal output to verify success. If all of the above steps work without producing errors, then TypeScript is successfully installed _at the project level_ in your `typescript-test` folder.
 
 
 ### Project creation using tsc
@@ -372,7 +372,7 @@ Remember that `tsconfig.ts` controls important behaviors of TypeScript. Some set
 For example, with `strictNullChecks` set to `true`, this code is invalid:
 
 ```ts
-const x: number = null; 
+const x: number = null;
 // invalid; can't assign null to a number type
 ```
 
@@ -413,7 +413,7 @@ Run the following command in your terminal session:
 npx tsc
 ```
 
-Notice there's an `app.js.map` file in addition to `app.js`. 
+Notice there's an `app.js.map` file in addition to `app.js`.
 
 In Visual Studio Code, open the **Run and Debug** pane, set a breakpoint in `app.ts`, and then select **Run and Debug** on the left side of the window. The breakpoint is hit successfully.
 
@@ -640,11 +640,75 @@ The simplest way to install the [Azure CLI](https://packages.fedoraproject.org/p
 sudo dnf install azure-cli
 ```
 
-Verify success by running `az --version`. Note that installing via `dnf` will install an older version of the Azure CLI tools. 
+Verify success by running `az --version`. Note that installing via `dnf` will install an older version of the Azure CLI tools.
 
 You cannot run `az upgrade` to upgrade the Azure CLI tools when they were installed using `dnf`.
 
 See [Install Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=dnf) for alternative installation methods that will ensure newer versions are installed.
+
+
+
+## Set up and connect to a Microsoft SQL Server
+
+Microsoft SQL Server (MSSQL) can be run in a container instead of installing it locally. We can also start a second container to connect to the first container and run commands.
+
+The advantage in using a second MSSQL container to run SQL commands in the first container is that we don't need to install MSSQL tools on the host machine. Instead, those tools are installed to the second container that we'll use to issue the commands.
+
+Let's get started.
+
+1. Pull the latest MSSQL image:
+
+```bash
+podman pull mcr.microsoft.com/mssql/server:2022-latest
+```
+
+2. Create the pod that will house our two containers:
+
+```bash
+podman pod create --name test-pod-mssql --share net -p 1433:1433
+```
+
+3. Next, create and run the main MSSQL container that you want to use as the database server:
+
+```bash
+podman run --env "ACCEPT_EULA=Y" --env "MSSQL_SA_PASSWORD=my-secret-pw" \
+   --pod test-pod-mssql \
+   # -p 1433:1433 \
+   --name sql1 --hostname sql1 \
+   --detach \
+   --rm \
+   mcr.microsoft.com/mssql/server:2022-latest
+# podman run --pod test-pod-mssql --detach --rm --name test-container-mssql --env POSTGRES_PASSWORD=my-secret-pw postgres:latest
+podman run --env "ACCEPT_EULA=Y" --env "MSSQL_SA_PASSWORD=my-secret-pw-12345" --pod test-pod-mssql --name sql1 --hostname sql1 --detach --rm mcr.microsoft.com/mssql/server:2022-latest
+```
+
+4. Finally, create the second MSSQL container that you want to use for issuing commands to the first container:
+
+```bash
+podman run --pod test-pod-mssql -it --rm --name sql2 mcr.microsoft.com/mssql/server:2022-latest /opt/mssql-tools18/bin/sqlcmd -U sa -S tcp:sql1,1433 -C -P "my-secret-pw-12345"
+```
+
+You should see a `1>` prompt after step 3. Type the following commands and press **Enter** to verify success:
+
+```
+1> SELECT @@version;
+2> GO
+```
+
+You will see the following output:
+
+```
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Microsoft SQL Server 2022 (RTM-CU17) (KB5048038) - 16.0.4175.1 (X64)
+	Dec 13 2024 09:01:53
+	Copyright (C) 2022 Microsoft Corporation
+	Developer Edition (64-bit) on Linux (Ubuntu 22.04.5 LTS) <X64>
+
+(1 rows affected)
+```
+
+5. Use `EXIT` or `QUIT` to terminate the session, which also terminates the 2nd container entirely. You'll still need to tear down the first container.
+
 
 ## Set up and connect to a containerized PostgreSQL Server
 
@@ -674,7 +738,7 @@ podman run --pod test-pod1 --detach --rm --name test-container1 --env POSTGRES_P
 podman run --pod test-pod1 -it --rm --name test-container2 postgres psql -U postgres -h localhost -p 5432 -d postgres
 ```
 
-After step 3, you should see a `postgres=#` prompt. Type `SELECT table_name FROM information_schema.tables;` and press **Enter** to verify success. Type `q` to exit the table list view. 
+After step 3, you should see a `postgres=#` prompt. Type `SELECT table_name FROM information_schema.tables;` and press **Enter** to verify success. Type `q` to exit the table list view.
 
 > You can always open Podman Desktop to easily delete pods and containers if you mess things up.
 
@@ -874,7 +938,7 @@ On 4K monitors the VM image may be tiny. You can use a `virt-manager` setting to
 
 ### Taking snapshots
 
-Snapshots can be taken in `virt-manager` just like in Virtual Box. You must navigate into the VM window (not the Virtual Machine Manager window) and select the Manage VM Snapshots icon at the far right of the toolbar. 
+Snapshots can be taken in `virt-manager` just like in Virtual Box. You must navigate into the VM window (not the Virtual Machine Manager window) and select the Manage VM Snapshots icon at the far right of the toolbar.
 
 The button to create a snapshot is the **+** (plus) symbol on the bottom left of the window.
 
@@ -929,7 +993,7 @@ You should also consider installing the USB viewer app, though this is optional:
 ```bash
 sudo dnf install usbview
 ```
-<!-- 
+<!--
 ```bash
 sudo apt install usbguard usbutils udisks2 usbview
 ``` -->
@@ -999,7 +1063,7 @@ See `ImplicitPolicyTarget=block` on line 3. This line tells the daemon how to tr
 
 See `PresentDevicePolicy` on line 4. This line tells the daemon how to treat USB devices that are already connected when the daemon starts. Allowed values are `allow`, `block`, `reject`, `keep` (this maintains the state the device is in) or `apply-policy`. The `apply-policy` default simply means to apply the rules to each USB device.
 
-> You can find further documentation at https://usbguard.github.io/documentation/configuration. 
+> You can find further documentation at https://usbguard.github.io/documentation/configuration.
 
 Let's look at the default ruleset that was created when we started and then stopped the daemon:
 
@@ -1091,7 +1155,7 @@ Lastly, let's cover some useful keyboard shortcuts for Gnome. You can find a ful
 
 The easiest way to install a font is to download it, extract the contents, and then double-click on the `.ttf` file. This opens Gnome Font Viewer. In the Gnome Font Viewer window, select the blue **Install** button to install the font.
 
-Alternatively, fonts can be installed by downloading a font and placing it into a ffont family older inside of `/.local/share/fonts`. 
+Alternatively, fonts can be installed by downloading a font and placing it into a ffont family older inside of `/.local/share/fonts`.
 
 Let's walk through what this would look like. First, download the [Inter font from Google Fonts](https://fonts.google.com/specimen/Inter) to your `/Downloads` folder.
 

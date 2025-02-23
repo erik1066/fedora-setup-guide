@@ -126,6 +126,17 @@ plugins=(git dotnet rust golang mvn npm terraform aws gradle)
 
 Save the file. The plugins will be applied to new terminal windows.
 
+## Increase the inotify watch count
+
+When working with certain development tools, you may run into the following error: "User limit of inotify watches reached". The default limit for file watchers is 735,530. Increase this limit to something more reasonable:
+
+1. Run `sudo nano /etc/sysctl.conf`
+1. Add `fs.inotify.max_user_watches=10000000` to the bottom of the file
+1. Add `fs.inotify.max_user_instances = 256` to the bottom of the file
+1. Run `sudo sysctl -p` (or restart the OS)
+
+Increasing the max user instances from 128 to 256 can also help with development debugging experiences.
+
 ## Install Zed
 
 **The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2024-08-29**
@@ -565,6 +576,15 @@ kubectl config current-context
 ```
 
 Observe `kind-kind-cluster` as the output.
+
+## Running common containers
+
+Let's run a Promethus container. We need to use `9091` on the host becase `kind` uses `9090` already.
+
+```bash
+podman pull quay.io/prometheus/prometheus
+podman run -d -p 9091:9090 quay.io/prometheus/prometheus
+```
 
 ## Helm
 

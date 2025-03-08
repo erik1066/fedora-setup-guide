@@ -463,10 +463,10 @@ sudo dnf install go
 Using `dnf` will likely install a slightly oudated version of Go. You can alternatively run the following commands to install an up-to-date version of Go. Be sure to replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
 
 ```bash
-curl -OL https://golang.org/dl/go1.23.3.linux-amd64.tar.gz
-sha256sum go1.23.3.linux-amd64.tar.gz
+curl -OL https://golang.org/dl/go1.23.7.linux-amd64.tar.gz
+sha256sum go1.23.7.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.23.7.linux-amd64.tar.gz
 ```
 
 If you are upgrading Go using these commands, then run the following command to verify success:
@@ -475,7 +475,7 @@ If you are upgrading Go using these commands, then run the following command to 
 go version
 ```
 
-Look for `go version go1.23.3 linux/amd64` (or newer).
+Look for `go version go1.23.7 linux/amd64` (or newer).
 
 If this is a first-time installation of Go, then running `go version` is likely to display the following output:
 

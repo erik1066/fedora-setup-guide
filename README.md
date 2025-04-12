@@ -996,6 +996,14 @@ Snapshots can be taken in `virt-manager` just like in Virtual Box. You must navi
 
 The button to create a snapshot is the **+** (plus) symbol on the bottom left of the window.
 
+### Windows 11 Virtual Machines and screen resolution
+
+There's a potential problem when running Windows 11 VMs in QEMU/KVM: The screen resolution is locked to 1280x800. The solution is to install the Spice Guest Tools for Windows. To do this, open your Windows 11 guest in QEMU/KVM and navigate to https://www.spice-space.org/download.html. Under **Windows binaries**, select "Windows SPICE Guest Tools (spice-guest-tools)" to download the `.exe` file and then run it. A reboot is required. Screen resolution will subsequently be modifiable.
+
+It's important to ensure that the Windows 11 VM properties are set to use `QXL` under **Video**.
+
+![Windows 11 VM properties in QEMU/KVM showing the "QXL" Video setting needed to ensure Spice Guest Tools work as intended.](images/qemu-kvm-win11-video-properties-01.png)
+
 ## Firefox
 
 See https://wiki.mozilla.org/Privacy/Privacy_Task_Force/firefox_about_config_privacy_tweeks for advanced privacy-related Firefox configuration options.

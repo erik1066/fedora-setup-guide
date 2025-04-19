@@ -497,12 +497,13 @@ Now run `go version` and you should see the expected version number output to th
 
 ## Terraform
 
-**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/cli/install/yum on 2024-09-02**
+**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install on 2025-04-19**
 
 
 ```bash
-sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
-sudo dnf install terraform
+sudo dnf install -y dnf-plugins-core
+sudo dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+sudo dnf -y install terraform
 ```
 
 Run `terraform --version` to verify the installation was a success.

@@ -226,6 +226,7 @@ code --install-extension vscjava.vscode-java-pack
 code --install-extension ms-python.python
 code --install-extension ms-dotnettools.csdevkit
 code --install-extension ms-mssql.mssql
+code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 ```
 
 ## Install JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)

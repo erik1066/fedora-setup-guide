@@ -1,18 +1,18 @@
-# Fedora 41 Setup Guide
+# Fedora 42 Setup Guide
 
-This repository contains instructions to set up Fedora 41 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
+This repository contains instructions to set up Fedora 42 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
 ## Check Fedoria Version
 
-Let's make sure we're on Fedora 41, which is the version of Fedora this setup guide is written for:
+Let's make sure we're on Fedora 42, which is the version of Fedora this setup guide is written for:
 
 ```bash
 cat /etc/fedora-release
 ```
 
-The terminal output should display `Fedora release 41 (Forty One)`.
+The terminal output should display `Fedora release 42 (Adams)`.
 
 ## Update the OS and install common tools
 
@@ -226,6 +226,7 @@ code --install-extension vscjava.vscode-java-pack
 code --install-extension ms-python.python
 code --install-extension ms-dotnettools.csdevkit
 code --install-extension ms-mssql.mssql
+code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 ```
 
 ## Install JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
@@ -440,7 +441,7 @@ sudo dnf install dotnet-sdk-8.0
 Run `dotnet --list-sdks` and look for the following output to verify success:
 
 ```
-8.0.114 [/usr/lib64/dotnet/sdk]
+8.0.115 [/usr/lib64/dotnet/sdk]
 ```
 
 Opt out of .NET's telemetry:
@@ -463,10 +464,10 @@ sudo dnf install go
 Using `dnf` will likely install a slightly oudated version of Go. You can alternatively run the following commands to install an up-to-date version of Go. Be sure to replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
 
 ```bash
-curl -OL https://golang.org/dl/go1.23.7.linux-amd64.tar.gz
-sha256sum go1.23.7.linux-amd64.tar.gz
+curl -OL https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
+sha256sum go1.24.2.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.23.7.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
 ```
 
 If you are upgrading Go using these commands, then run the following command to verify success:
@@ -475,7 +476,7 @@ If you are upgrading Go using these commands, then run the following command to 
 go version
 ```
 
-Look for `go version go1.23.7 linux/amd64` (or newer).
+Look for `go version go1.24.2 linux/amd64` (or newer).
 
 If this is a first-time installation of Go, then running `go version` is likely to display the following output:
 
@@ -497,12 +498,13 @@ Now run `go version` and you should see the expected version number output to th
 
 ## Terraform
 
-**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/cli/install/yum on 2024-09-02**
+**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install on 2025-04-19**
 
 
 ```bash
-sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
-sudo dnf install terraform
+sudo dnf install -y dnf-plugins-core
+sudo dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+sudo dnf -y install terraform
 ```
 
 Run `terraform --version` to verify the installation was a success.
@@ -511,7 +513,7 @@ Run `terraform --version` to verify the installation was a success.
 
 **Instructions for installing Podman taken from https://podman.io/docs/installation on 2024-09-02**
 
-Podman is installed by default in Fedora 40 Workstation. To confirm, run:
+Podman is installed by default in Fedora Workstation. To confirm, run:
 
 ```bash
 podman run hello-world
@@ -623,7 +625,7 @@ In the **Unity Hub**, be sure to navigate to **Preferences** > **Privacy** and o
 
 **Instructions taken from https://discussions.unity.com/t/can-not-activate-license-in-unity-hub-on-fedora-41-rhel9-until-trust-sha-1/1520652/17 on 2024-12-01**
 
-Fedora 41 no longer allows SHA-1. This means SHA-1-based Unity licenses cannot be activated. Rather than displaying an error, however, the license process in Unity Hub fails without any messages as to why. This can lead users down a long road of troubleshooting things and ultimately wastes time.
+Fedora 41 and later releases no longer allow SHA-1. This means SHA-1-based Unity licenses cannot be activated. Rather than displaying an error, however, the license process in Unity Hub fails without any messages as to why. This can lead users down a long road of troubleshooting things and ultimately wastes time.
 
 Fixing this involves updating Fedora's crypto policies to allow SHA-1, which unfortunately, can be a degradation of system security. Thankfully we can isolate the allowed use of SHA-1 to just Unity Hub:
 
@@ -967,7 +969,7 @@ Now log out and log in again.
 
 ```bash
 cd ~/Downloads
-sudo mv Fedora-Silverblue-ostree-x86_64-41-1.4.iso /var/lib/libvirt/images
+sudo mv Fedora-Silverblue-ostree-x86_64-42-1.1.iso /var/lib/libvirt/images
 ```
 
 3. Open the **Virtual Machine Manager** (aka `virt-manager`)
@@ -975,7 +977,7 @@ sudo mv Fedora-Silverblue-ostree-x86_64-41-1.4.iso /var/lib/libvirt/images
 1. Select **Local install media** and then **Forward**. Step 2 of 5 appears.
 1. Select **Browse**. The ISO you copied into the `/var/lib/libvirt/images` folder should appear.
 1. Select the ISO and choose **Choose Volume**
-1. You  may need to select an operating system. if Virtual Machine Manager couldn't auto-detect one based on the ISO. In our case, using Fedora Silverblue, "Fedora Silverblue 40" is auto-detected and we can skip manual OS selection.
+1. You  may need to select an operating system. if Virtual Machine Manager couldn't auto-detect one based on the ISO. In our case, using Fedora Silverblue, "Fedora Silverblue 42" is auto-detected and we can skip manual OS selection.
 1. Select **Forward**
 1. Choose at least "8192" for memory and 2 CPUs and then select **Forward**
 1. Choose at least 25 GB of disk storage and select **Forward**
@@ -1008,7 +1010,7 @@ It's important to ensure that the Windows 11 VM properties are set to use `QXL` 
 
 See https://wiki.mozilla.org/Privacy/Privacy_Task_Force/firefox_about_config_privacy_tweeks for advanced privacy-related Firefox configuration options.
 
-This Fedora 40 Setup Guide does _not_ list all the options on the site above. It's recommended you visit that site and decide on each option for yourself. However, a few privacy tweaks are important enough that they are worth mentioning here.
+This Setup Guide does _not_ list all the options on the site above. It's recommended you visit that site and decide on each option for yourself. However, a few privacy tweaks are important enough that they are worth mentioning here.
 
 Open `about:config` in your Firefox URL bar and accept the warning to proceed with making these privacy tweaks.
 

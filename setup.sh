@@ -42,7 +42,7 @@ echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> 
 # Install Zed Editor
 ###########################
 
-curl https://zed.dev/install.sh | sh
+curl -f https://zed.dev/install.sh | sh
 
 
 ###########################
@@ -98,7 +98,8 @@ sudo dnf -y install go
 # Install Terraform
 ###########################
 
-sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+wget -O- https://rpm.releases.hashicorp.com/fedora/hashicorp.repo | sudo tee /etc/yum.repos.d/hashicorp.repo
+sudo yum list available | grep hashicorp
 sudo dnf -y install terraform
 
 

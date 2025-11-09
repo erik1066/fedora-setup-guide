@@ -444,7 +444,7 @@ sudo dnf install dotnet-sdk-8.0
 Run `dotnet --list-sdks` and look for the following output to verify success:
 
 ```
-8.0.115 [/usr/lib64/dotnet/sdk]
+8.0.119 [/usr/lib64/dotnet/sdk]
 ```
 
 Opt out of .NET's telemetry:

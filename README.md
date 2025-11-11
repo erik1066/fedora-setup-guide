@@ -1,18 +1,18 @@
-# Fedora 42 Setup Guide
+# Fedora 43 Setup Guide
 
-This repository contains instructions to set up Fedora 42 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
+This repository contains instructions to set up Fedora 43 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
 ## Check Fedoria Version
 
-Let's make sure we're on Fedora 42, which is the version of Fedora this setup guide is written for:
+Let's make sure we're on Fedora 43, which is the version of Fedora this setup guide is written for:
 
 ```bash
 cat /etc/fedora-release
 ```
 
-The terminal output should display `Fedora release 42 (Adams)`.
+The terminal output should display `Fedora release 43 (Forty Three)`.
 
 ## Update the OS and install common tools
 
@@ -139,14 +139,14 @@ Increasing the max user instances from 128 to 256 can also help with development
 
 ## Install Zed
 
-**The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2024-08-29**
+**The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2025-11-09**
 
 Zed is a highly-efficient, cross-platform code editor written in Rust.
 
 Run the following command to install Zed:
 
 ```bash
-curl https://zed.dev/install.sh | sh
+curl -f https://zed.dev/install.sh | sh
 ```
 
 To run Zed after installation, run:
@@ -157,13 +157,13 @@ zed
 
 ## Install Visual Studio Code
 
-**The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2024-08-29**
+**The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2025-11-09**
 
 1. Run the following commands:
 
 ```bash
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 dnf check-update
 sudo dnf install code
 ```
@@ -171,12 +171,18 @@ sudo dnf install code
 2. Launch Visual Studio Code
 1. Navigate **File** > **Preferences** > **Settings** and then type "telemetry"
 1. Select "off" for the **Telemetry Level**
-1. Disable the "Dotnet Acquisition Extension: Enable Telemetry" option
+1. Disable:
+  1. **Telemetry > Edit Stats: Show Decorations**
+  1. **Telemetry > Edit Stats: Enabled**
+  1. **Telemetry > Edit Stats: Details: Enabled**
+  1. **Telemetry > Experimental: Tree Sitter Telemetry**
+1. Disable the **"**Dotnet Acquisition Extension: Enable Telemetry**"** option
 1. Optional: While still in **Settings**, change the following to "False":
    1. **Enable Natural Language Search**
    1. **Enable Experiments**
 1. Optional: While still in **Settings**, enable **Editor: Format on Save**. Turning this setting on is the same as running the **Format Document** command each time you save a file.
 1. Optional: While Visual Studio Code is open, select **Activities**, right-click the Visual Studio Code icon on the dock, and select **Add to favorites**.
+1. Optional: If you have Docker installed, set **Docker: Lsp: Telemetry** to "off".
 
 The following VS Code extensions are handy:
 
@@ -467,10 +473,10 @@ sudo dnf install go
 Using `dnf` will likely install a slightly oudated version of Go. You can alternatively run the following commands to install an up-to-date version of Go. Be sure to replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
 
 ```bash
-curl -OL https://go.dev/dl/go1.24.3.linux-amd64.tar.gz
-sha256sum go1.24.3.linux-amd64.tar.gz
+curl -OL https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
+sha256sum go1.25.4.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.24.3.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.25.4.linux-amd64.tar.gz
 ```
 
 If you are upgrading Go using these commands, then run the following command to verify success:
@@ -479,7 +485,7 @@ If you are upgrading Go using these commands, then run the following command to 
 go version
 ```
 
-Look for `go version go1.24.3 linux/amd64` (or newer).
+Look for `go version go1.25.4 linux/amd64` (or newer).
 
 If this is a first-time installation of Go, then running `go version` is likely to display the following output:
 
@@ -501,12 +507,12 @@ Now run `go version` and you should see the expected version number output to th
 
 ## Terraform
 
-**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install on 2025-04-19**
+**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install on 2025-11-09**
 
 
 ```bash
-sudo dnf install -y dnf-plugins-core
-sudo dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+wget -O- https://rpm.releases.hashicorp.com/fedora/hashicorp.repo | sudo tee /etc/yum.repos.d/hashicorp.repo
+sudo yum list available | grep hashicorp
 sudo dnf -y install terraform
 ```
 
@@ -972,7 +978,7 @@ Now log out and log in again.
 
 ```bash
 cd ~/Downloads
-sudo mv Fedora-Silverblue-ostree-x86_64-42-1.1.iso /var/lib/libvirt/images
+sudo mv Fedora-Silverblue-ostree-x86_64-43-1.6.iso /var/lib/libvirt/images
 ```
 
 3. Open the **Virtual Machine Manager** (aka `virt-manager`)
@@ -980,7 +986,7 @@ sudo mv Fedora-Silverblue-ostree-x86_64-42-1.1.iso /var/lib/libvirt/images
 1. Select **Local install media** and then **Forward**. Step 2 of 5 appears.
 1. Select **Browse**. The ISO you copied into the `/var/lib/libvirt/images` folder should appear.
 1. Select the ISO and choose **Choose Volume**
-1. You  may need to select an operating system. if Virtual Machine Manager couldn't auto-detect one based on the ISO. In our case, using Fedora Silverblue, "Fedora Silverblue 42" is auto-detected and we can skip manual OS selection.
+1. You  may need to select an operating system. if Virtual Machine Manager couldn't auto-detect one based on the ISO. In our case, using Fedora Silverblue, "Fedora Silverblue 43" is auto-detected and we can skip manual OS selection.
 1. Select **Forward**
 1. Choose at least "8192" for memory and 2 CPUs and then select **Forward**
 1. Choose at least 25 GB of disk storage and select **Forward**

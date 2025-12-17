@@ -81,10 +81,10 @@ sudo dnf -y install nodejs
 
 
 ###########################
-# Install .NET SDK 8.0
+# Install .NET SDK 10.0
 ###########################
 
-sudo dnf -y install dotnet-sdk-8.0
+sudo dnf -y install dotnet-sdk-10.0
 
 
 ###########################

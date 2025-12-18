@@ -38,6 +38,18 @@ Let's next install some common development tools:
 sudo dnf -y install make
 ```
 
+## Install COSMIC Desktop Environment
+
+If you want the option of using System76's COSMIC desktop environment instead of Gnome, you can run the subsequent commands. Note this code block will reboot your system.
+
+```bash
+sudo dnf upgrade --refresh
+sudo dnf install @cosmic-desktop-environment
+sudo reboot
+```
+
+Use the gear icon when logging in to switch to COSMIC.
+
 ## Install Gnome Tweaks
 
 Install Gnome Tweaks:

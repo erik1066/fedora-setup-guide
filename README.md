@@ -1027,7 +1027,68 @@ It's important to ensure that the Windows 11 VM properties are set to use `QXL` 
 
 ![Windows 11 VM properties in QEMU/KVM showing the "QXL" Video setting needed to ensure Spice Guest Tools work as intended.](images/qemu-kvm-win11-video-properties-01.png)
 
-## Firefox
+## Install Firefox
+
+For security purposes, it's better to run Firefox as a Flatpak instead of from RPM. Flatpak uses bubblewrap for namespace isolation (mount, PID, network options, etc.) and provides a strong default sandbox at low effort. 
+
+First, install Firefox from Flathub:
+
+```bash
+flatpak install flathub org.mozilla.firefox
+```
+
+Confirm installation by running:
+
+```bash
+flatpak list | grep -i firefox
+```
+
+You should see output like such:
+
+```
+Firefox	org.mozilla.firefox	146.0.1	stable	flathub	system
+```
+
+You will have "two" Firefoxes on your system after this: The one from Flathub and the one installed by default. Make sure the Flathub installation of Firefox is the OS's default browser:
+
+```bash
+xdg-settings set default-web-browser org.mozilla.firefox.desktop
+```
+
+Verify:
+
+```bash
+xdg-settings get default-web-browser
+```
+
+Expected:
+
+```
+org.mozilla.firefox.desktop
+```
+
+The simplest next step is to simply uninstall the RPM Firefox:
+
+```bash
+sudo dnf remove firefox
+```
+
+However, we could instead make the `firefox` command launch the Flatpak. Typing `which firefox` in a terminal should display: `/usr/bin/firefox`. 
+
+Let's override this.
+
+```bash
+mkdir -p ~/.local/bin
+cat <<'EOF' > ~/.local/bin/firefox
+#!/usr/bin/env bash
+exec flatpak run org.mozilla.firefox "$@"
+EOF
+chmod +x ~/.local/bin/firefox
+```
+
+Log out and in again. Starting Firefox from Gnome or COSMIC should start the Flathub version instead of the RPM version.
+
+## Configure Firefox
 
 See https://wiki.mozilla.org/Privacy/Privacy_Task_Force/firefox_about_config_privacy_tweeks for advanced privacy-related Firefox configuration options.
 

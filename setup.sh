@@ -130,3 +130,11 @@ sudo dnf -y install azure-cli
 
 sudo dnf -y install @virtualization
 sudo usermod -a -G libvirt $(whoami)
+
+
+###########################
+# Install Firefox (Flathub)
+###########################
+
+sudo dnf remove firefox
+flatpak install flathub org.mozilla.firefox

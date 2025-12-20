@@ -4,6 +4,8 @@ This repository contains instructions to set up Fedora 43 Workstation for develo
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
+![Fedora 43 Desktop](<./images/desktop01.png>)
+
 ## Check Fedoria Version
 
 Let's make sure we're on Fedora 43, which is the version of Fedora this setup guide is written for:

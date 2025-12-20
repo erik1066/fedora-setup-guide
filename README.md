@@ -6,7 +6,7 @@ This repository contains instructions to set up Fedora 43 Workstation for develo
 
 ![Fedora 43 Desktop](<./images/desktop01.png>)
 
-## Check Fedoria Version
+## Check Fedora Version
 
 Let's make sure we're on Fedora 43, which is the version of Fedora this setup guide is written for:
 

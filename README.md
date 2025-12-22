@@ -6,6 +6,8 @@ This repository contains instructions to set up Fedora 43 Workstation for develo
 
 ![Fedora 43 Desktop](<./images/desktop01.png>)
 
+Proceed at your own risk and verify each command before executing that command. If you're unsure what something does, use a search engine or generative AI to ask what the command is doing. 
+
 ## Check Fedora Version
 
 Let's make sure we're on Fedora 43, which is the version of Fedora this setup guide is written for:
@@ -16,17 +18,19 @@ cat /etc/fedora-release
 
 The terminal output should display `Fedora release 43 (Forty Three)`.
 
+Stop if you get something other than Fedora 43. In that case, this guide may be out-of-date and providing inaccurate information for the version you're using.
+
 ## Update the OS and install common tools
 
-The first thing you should do is update Fedora:
+Update Fedora:
 
 ```bash
 sudo dnf upgrade
 ```
 
-Reboot the system.
+Reboot the system once that completes.
 
-Upon logging in again, check for device firmware updates and install those updates by running the following commands:
+Check for device firmware updates and install those updates by running the following commands:
 
 ```bash
 fwupdmgr refresh --force
@@ -40,9 +44,11 @@ Let's next install some common development tools:
 sudo dnf -y install make
 ```
 
-## Install COSMIC Desktop Environment
+## Optional: Install COSMIC Desktop Environment
 
-If you want the option of using System76's COSMIC desktop environment instead of Gnome, you can run the subsequent commands. Note this code block will reboot your system.
+Run the subsequent commands if you want the option of using System76's COSMIC desktop environment instead of only having the option of Gnome. 
+
+This code block will reboot your system.
 
 ```bash
 sudo dnf upgrade --refresh
@@ -265,6 +271,8 @@ tar -xzf jetbrains-toolbox-<build>.tar.gz && cd jetbrains-toolbox-<build> && ./j
 
 3. Select the product that you want to install.
 4. Pin the Toolbox app to the Dash.
+
+If you want to use remote build/execution environments with your JetBrains products instead of doing that on your Fedora 43 workstation, see [the remote code execution guide](remote-execution.md). This guide walks you through setting a Fedora Server VM on your system that will have your build tools; you'll connect to that VM through JetBrains IDEs via SSH. (This can also apply if you have another physical machine on your network that acts as a remote build machine.)
 
 ## Install Postman
 
@@ -1461,3 +1469,81 @@ cd ~/Downloads
 unzip Inter.zip -d Inter/
 cp ~/Downloads/Inter-VariableFont_opsz,wght.ttf ~/.local/share/fonts/Inter
 ```
+
+## Filesystem security Hardening
+
+First, we will set `noexec` on `/tmp`. `/tmp` is world-writable and used by every user, service, and daemon. It's frequently used to store downloaded files, temp scripts, unpacked archives, etc. 
+
+From an attacker's perspective, it's writable without privileges, always present, and almost never locked down, making it an ideal staging area.
+
+```bash
+sudo nano /etc/fstab
+```
+
+Recommend adding these lines:
+
+```
+tmpfs   /tmp      tmpfs   defaults,noexec,nosuid,nodev,seclabel   0  0
+tmpfs   /var/tmp  tmpfs   defaults,noexec,nosuid,nodev,seclabel   0  0
+```
+
+Fedora Workstation doesn't rely on these folders for normal operations. Modern IDEs, meanwhile, rely on $HOME/.cache, $HOME/.local, or `$XDG_RUNTIME_DIR`.
+
+Let's go back to fstab:
+
+```bash
+sudo nano /etc/fstab
+```
+
+Recommend adding this lines:
+
+```
+/home   ext4   defaults,nosuid,nodev   0  2
+```
+
+Setuid binaries in `/home` should never be ligit and device files in `/home` shouldn't exist. But we want to avoid adding `noexec` to `/home` because this will break your IDEs, like JetBrains for example, and will break games you install on the system (e.g. Steam).
+
+
+Now let's create a configuration file:
+
+```bash
+sudo nano /etc/sysctl.d/99-hardening.conf 
+```
+
+Add:
+
+```config
+# Block kernel pointer leaks 
+kernel.kptr_restrict = 2  
+
+# Harden BPF 
+kernel.unprivileged_bpf_disabled = 1  
+
+# Disable unprivileged user namespaces (Fedora default is permissive) 
+# Note that this breaks container-based workflows, so only uncomment if you do not plan to use containers on this system
+# kernel.unprivileged_userns_clone = 0  
+
+# Restrict dmesg 
+kernel.dmesg_restrict = 1  
+
+# Protect hardlinks/symlinks 
+fs.protected_hardlinks = 1 fs.protected_symlinks = 1  
+
+# ASLR full 
+kernel.randomize_va_space = 2
+```
+
+`kernel.kptr_restrict = 2` restricts access to kernel pointers, which are sensitive and speak to memory layout of the kernel. A setting of `2` stops even `root` from reading pointer info. Note that Fedora 43's default is `1`.
+
+`kernel.dmesg_restrict = 1` restricts access to the `dmesg` command, which shows kernel ring buffer logs. Attackers can use these logs, which may contain sensitive info about kernel config etc.
+
+`kernel.randomize_va_space = 2` fully enables address space layout randomization (ASLR). Fedora 43's default is `1`, or partial randomization only. A setting of `2` makes it harder for attackers to predict the memory layout of processes. However, this setting can negatively impact certain debugging experiences since memory address are constantly changing and it carries a slight performance overhead. Some legacy software might also not work if that software makes assumptions abot memory layout. Be warned.
+
+
+Now run:
+
+```bash
+sudo sysctl --system
+```
+
+This prevents local privilege escalation exploits and kernel info leaks.

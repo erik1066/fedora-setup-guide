@@ -1173,12 +1173,6 @@ flatpak override --user --nodevice=all org.mozilla.Thunderbird
 
 This will remove the `devices=all;` line when running `--show-permissions`.
 
-Remove access to the local LAN:
-
-```bash
-flatpak override --user --unshare=network org.mozilla.Thunderbird
-```
-
 Since we're on Fedora and using Wayland, let's disable X11:
 
 ```bash

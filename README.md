@@ -1122,6 +1122,154 @@ webgl.disabled = true
 
 This command disables WebGL. If you never visit sites with WebGL content then it can be safely disabled.
 
+## Thunderbird
+
+This guide will cover what is assumed to be the most common mail client for Linux: Thunderbird. Know that Thunderbird comes pre-installed in Fedora 43. The first thing to do is uninstall it, since we'll be proceeding with [the Flatpak version of Thunderbird](https://flathub.org/en/apps/org.mozilla.Thunderbird) instead.
+
+```bash
+sudo dnf remove thunderbird
+```
+
+Now let's install the [Flatpak])(https://flathub.org/en/apps/org.mozilla.Thunderbird):
+
+```bash
+flatpak install flathub org.mozilla.Thunderbird
+```
+
+### Set Thunderbird Flathub Permissions
+
+Let's get a baseline of what our permissions are:
+
+```bash
+flatpak info --show-permissions org.mozilla.Thunderbird
+```
+
+First, let's remove broad access to the home directory:
+
+```bash
+flatpak override --user --nofilesystem=home org.mozilla.Thunderbird
+```
+
+Now let's allow only access to a specific subfolder in `/Downloads` called `thunderbird`:
+
+```bash
+mkdir -p ~/Downloads/thunderbird
+flatpak override --user --filesystem=~/Downloads/thunderbird org.mozilla.Thunderbird
+```
+
+Remove hardware access:
+
+```bash
+flatpak override --user --nodevice=all org.mozilla.Thunderbird
+```
+
+This will remove the `devices=all;` line when running `--show-permissions`.
+
+Remove access to the local LAN:
+
+```bash
+flatpak override --user --unshare=network org.mozilla.Thunderbird
+```
+
+Since we're on Fedora and using Wayland, let's disable X11:
+
+```bash
+flatpak override --user --nosocket=x11 org.mozilla.Thunderbird
+flatpak override --user --nosocket=fallback-x11 org.mozilla.Thunderbird
+```
+
+This prevents keystroke snooping, window scraping, and X11 global input attacks.
+
+Let's now remove audio access, as Thunderbird shouldn't need this (though be careful if you rely on notification sounds to let you know when new mail arrives).
+
+```bash
+flatpak override --user --nosocket=pulseaudio org.mozilla.Thunderbird
+```
+
+Let's remove access to printing services next. If you do need to print an email, you can save it to disk and print the file from another app.
+
+```bash
+flatpak override --user --nosocket=cups org.mozilla.Thunderbird
+```
+
+Verify the result:
+
+```bash
+flatpak info --show-permissions org.mozilla.Thunderbird
+```
+
+User-level overrides are in:
+
+```bash
+~/.local/share/flatpak/overrides/org.mozilla.Thunderbird
+```
+
+System-wide overrides are in:
+
+```bash
+/etc/flatpak/overrides/org.mozilla.Thunderbird
+```
+
+As plain-text, INI-style files, they can be diff'd, version controlled, and backed up. Consider putting them into version control.
+
+Since we've created no system-wide overrides, we just have the user-level override. It should now look something like this:
+
+```ini
+[Context]
+filesystems=!home;~/Downloads/thunderbird;
+devices=!all;
+shared=!network;
+sockets=!x11;!pulseaudio;!fallback-x11;!cups;
+```
+
+### Thunderbird Security/Privacy Settings
+
+Navigate to **Settings** > **Privacy & Security** and:
+1. Block remote content in messages
+1. Do not allow third-party cookies
+1. Tell websites not to sell or share data
+1. Disallow Thunderbird to send data to Mozilla
+
+This prevents tracking pixels, IP address leakage, and web-based exploit delivery. This will restrict remote fonts and external CSS and not just images.
+
+> If you want to disable cookies entirely, this could break OAuth2-based auth when you set up an account for the first time.
+
+### Thunderbird Engine Hardening
+
+Now go to `about:config` by navigating to **Settings** > **General** > **Config Editor** (go all the way to the bottom of the page).
+
+Disable Javascript in mail content:
+
+```
+javascript.enabled = false
+```
+
+> Disabling JavaScript breaks OAuth2-based auth when you set up an account for the first time. Consider disabling JavaScript _after_ account creation. If you see an OAuth2 window popup and immediately close, it's probably because either (a) cookies are disabled or (b) JavaScript is disabled - or perhaps both.
+
+Verify external protocol handlers are disabled:
+
+```
+network.protocol-handler.expose-all = false
+```
+
+Verify that file:// access from emails is restricted:
+
+```
+security.fileuri.strict_origin_policy = true
+```
+
+### Thunderbird Attachment Handling
+
+Disable auto-open by navigating to **Settings** > **General** > **Files & Attachments**:
+
+1. Remove default handlers for PDFs, ZIPs, DOCs
+1. Always ask where to save files.
+
+Open attachments **manually**, ideally after scanning them.
+
+A good idea is to open attachments in other Flatpak'd apps or a virtual machine.
+
+
 ## Install and Configure USBGuard
 
 > Enabling USBGuard in Fedora 41 may cause the OS to hard-lock on reboot or power off and prevent virtual machines from starting. This section will be updated with more details as they become available.

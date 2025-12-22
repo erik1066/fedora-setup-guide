@@ -1130,7 +1130,7 @@ This guide will cover what is assumed to be the most common mail client for Linu
 sudo dnf remove thunderbird
 ```
 
-Now let's install the [Flatpak])(https://flathub.org/en/apps/org.mozilla.Thunderbird):
+Now let's install the [Flatpak](https://flathub.org/en/apps/org.mozilla.Thunderbird):
 
 ```bash
 flatpak install flathub org.mozilla.Thunderbird

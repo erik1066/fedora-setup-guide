@@ -30,6 +30,13 @@ flatpak override --user \                                                       
   com.jetbrains.Rider
 ```
 
+Let's also ensure that Rider can talk to the SSH agent socket. This is important later when we want to do SSH forwarding.
+
+```bash
+flatpak override --user --filesystem=xdg-run/ssh-auth com.jetbrains.Rider
+flatpak override --user --filesystem=xdg-run/gcr com.jetbrains.Rider
+```
+
 Verify:
 
 ```bash
@@ -638,3 +645,47 @@ cat ~/.ssh/id_ed25519.pub
 ```
 
 Go to GitHub.com and log in. Click on your Profile Picture and select **Settings** > **SSH and GPG Keys**. Click New SSH Key, and paste your public key in the form.
+
+## Remote Web Debugging
+
+We need additional steps to debug web applications, such as ASP.NET or Blazor apps (to follow along with our use of Rider as the example IDE to set up), on the **host** machine. In other words, we want to build, debug, and run the web app in the virtual machine but debug on the host machine using the browser of our choice. Let's set that up now.
+
+We're going to run run Kestrel bound to loopback in the VM:
+
+```bash
+export ASPNETCORE_URLS="http://127.0.0.1:5000"
+dotnet run
+```
+
+Now on the host:
+
+```bash
+ssh -N -L 5000:127.0.0.1:5000 devexec@192.168.124.188
+```
+
+Now just open `http://localhost:5000` in Firefox. Rider (the IDE) debugs .NET while Firefox devtools work on the client. This is a clean split and works great for ASP.NET MVC.
+
+## OpenAI Codex Integration with Rider
+
+Let's install Codex. Now, `npm install -g @openai/codex` is unlikely to work given our setup, so we need to take a different track. Let's use npm’s per-user "global" directory:
+
+```bash
+# Create a user-global npm prefix
+mkdir -p ~/.local/share/npm-global
+
+# Tell npm to use it for global installs
+npm config set prefix "$HOME/.local/share/npm-global"
+
+# Put its bin directory on your PATH (bash/zsh)
+echo 'export PATH="$HOME/.local/share/npm-global/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Install Codex CLI
+npm install -g @openai/codex
+
+# Sanity check
+which codex
+codex --version
+```
+
+Done.

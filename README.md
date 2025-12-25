@@ -159,7 +159,7 @@ Increasing the max user instances from 128 to 256 can also help with development
 
 ## Install Zed
 
-**The instructions for installing Zed are derived from https://zed.dev/docs/linux#zed-on-linux and are current as of 2025-11-09**
+**The instructions for installing Zed are derived from https://zed.dev/docs/linux and are current as of 2025-12-25**
 
 Zed is a highly-efficient, cross-platform code editor written in Rust.
 
@@ -173,6 +173,20 @@ To run Zed after installation, run:
 
 ```bash
 zed
+```
+
+### Zed from Flathub
+
+You can alternatively install Zed as a Flatpak: https://flathub.org/en/apps/dev.zed.Zed
+
+```bash
+flatpak install flathub dev.zed.Zed
+```
+
+And then run it as such:
+
+```bash
+flatpak run dev.zed.Zed
 ```
 
 ## Install Visual Studio Code

@@ -1218,10 +1218,11 @@ Since we've created no system-wide overrides, we just have the user-level overri
 
 ```ini
 [Context]
-filesystems=!home;~/Downloads/thunderbird;
-devices=!all;
-shared=!network;
-sockets=!x11;!pulseaudio;!fallback-x11;!cups;
+shared=network;ipc;
+sockets=wayland;pcsc;
+features=devel;
+filesystems=~/.gnupg;xdg-config/gtk-4.0:ro;/run/.heim_org.h5l.kcm-socket;xdg-run/gnupg:ro;xdg-download;~/Downloads/thunderbird;xdg-run/speech-dispatcher:ro;
+persistent=.thunderbird;
 ```
 
 ### Thunderbird Security/Privacy Settings

@@ -1228,15 +1228,20 @@ System-wide overrides are in:
 
 As plain-text, INI-style files, they can be diff'd, version controlled, and backed up. Consider putting them into version control.
 
-Since we've created no system-wide overrides, we just have the user-level override. It should now look something like this:
+Since we've created no system-wide overrides, we just have the user-level override. To see those, execute:
+
+```bash
+cat ~/.local/share/flatpak/overrides/org.mozilla.Thunderbird
+```
+
+It should now look something like this:
 
 ```ini
 [Context]
-shared=network;ipc;
-sockets=wayland;pcsc;
-features=devel;
-filesystems=~/.gnupg;xdg-config/gtk-4.0:ro;/run/.heim_org.h5l.kcm-socket;xdg-run/gnupg:ro;xdg-download;~/Downloads/thunderbird;xdg-run/speech-dispatcher:ro;
-persistent=.thunderbird;
+filesystems=!home;~/Downloads/thunderbird;
+devices=!all;
+shared=network;
+sockets=!x11;!pulseaudio;!fallback-x11;!cups;
 ```
 
 ### Thunderbird Security/Privacy Settings

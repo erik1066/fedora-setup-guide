@@ -690,6 +690,86 @@ OPENSSL_CONF=~/my-insecure-unity-opensslcnf.config unityhub
 
 This section will be updated if and when Unity adopts an algorithm that no longer runs afoul of Fedora's default crypto policies.
 
+## Blender
+
+If we're installing Unity, we probably want Blender, too. 
+
+```bash
+flatpak install flathub org.blender.Blender
+```
+
+> For Blender, prefer Flathub over Fedora’s Flatpak remote. Fedora’s Flatpak registry is philosophically aligned with Fedora, but Flathub is materially better for Blender in terms of version freshness, completeness, and real-world usability.
+
+Let's get a security baseline on Blender:
+
+```bash
+flatpak info --show-permissions org.blender.Blender
+```
+
+Expected:
+
+```ini
+[Context]
+shared=network;ipc;
+sockets=x11;wayland;pulseaudio;fallback-x11;
+devices=dri;
+filesystems=/run/spnav.sock:ro;xdg-config/gtk-4.0:ro;host;
+
+[Environment]
+SPNAV_SOCKET=/run/spnav.sock
+LD_LIBRARY_PATH=/app/lib:/app/lib/GL/default/lib
+AMD_DEBUG=useaco
+VK_ICD_FILENAMES=/app/lib/GL/vulkan/icd.d
+TMP_DIR=/tmp
+TMP=/tmp
+```
+
+Let's harden things. We can ensure Blender doesn't have wide-open access to our $HOME directory via user overrides:
+
+```bash
+flatpak override --user --nofilesystem=host org.blender.Blender
+flatpak override --user --nofilesystem=home org.blender.Blender
+```
+
+You can confirm your user-level overrides for Blender exist:
+
+```bash
+ls ~/.local/share/flatpak/overrides/
+```
+
+You should see an entry from `ls` showing `org.blender.Blender`.
+
+Now let's grant explict permission to your development folder(s):
+
+```bash
+flatpak override --user \
+  --filesystem=/home/you/dev/source \
+  --filesystem=/home/you/dev/assets:ro \
+  org.blender.Blender
+```
+
+Be sure ot change the `/home/you/dev/...` path to whatever your actual path(s) are that you want to grant permission to.
+
+If you **don't** use online asset browsers, cloud sync, or add-on downloads from inside Blender, then you can disable network access:
+
+```bash
+flatpak override --user --unshare=network org.blender.Blender
+```
+
+You can also turn network access back on at anytime via:
+
+```bash
+flatpak override --user --share=network org.blender.Blender
+```
+
+This is aligned with zero-trust security architecture.
+
+Let's do a final audit:
+
+```bash
+flatpak info --show-permissions org.blender.Blender
+```
+
 
 ## AWS CLI Tools
 

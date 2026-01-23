@@ -189,6 +189,72 @@ And then run it as such:
 flatpak run dev.zed.Zed
 ```
 
+## Obsidian
+
+We'll install the Flatpak version of Obsidian. See https://flathub.org/en/apps/md.obsidian.Obsidian.
+
+```bash
+flatpak install flathub md.obsidian.Obsidian
+```
+
+If you're unconcerned with security-hardening Obsidian then feel free to skip the following hardening steps. Otherwise, let's start the hardening process by baselining the default permissions:
+
+```bash
+flatpak info --show-permissions md.obsidian.Obsidian
+```
+
+Optionally, lock down network access:
+
+```bash
+flatpak override --user md.obsidian.Obsidian --unshare=network
+```
+
+You can also restrict Obsidian from accessing `$HOME`, though we will allow access to specific subfolders in `$HOME` in the next step. The intent is to stop Obsidian from reading sensitive folders in `$HOME` like `~/.ssh`, your financial information, confidential company data, and so on.
+
+```bash
+flatpak override --user md.obsidian.Obsidian --nofilesystem=home
+```
+
+Below shows how you can whitelist a specific folder in `$HOME` that Obsidian can access. You should replace `Documents/Obsidian` with the folder(s) of your choice. If you want to give Obsidian read-only access to a folder, use `:ro` instead of `:rw`.
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --filesystem=$HOME/Documents/Obsidian:rw
+```
+
+We can safely disable communications that it doesn't need access to. Note, if you want notifications from Obsidian, consider deleting that line below.
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --nodevice=all \
+  --no-talk-name=org.freedesktop.secrets \
+  --no-talk-name=org.freedesktop.Notifications
+```
+
+Let's explicitly allow only safe portals:
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --talk-name=org.freedesktop.portal.FileChooser
+```
+
+This allows manual "Open file" dialogs but only when you explicitly choose files. Background scanning is thus not possible.
+
+Let's remove some other stuff it doesn't need:
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --nosocket=ssh-auth \
+  --nofilesystem=xdg-run/gnupg \
+  --nofilesystem=/mnt \
+  --nofilesystem=/media \
+  --nofilesystem=/run/media \
+  --nofilesystem=xdg-run/app/com.discordapp.Discord
+```
+
+Done.
+
+
 ## Install Visual Studio Code
 
 **The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2025-11-09**

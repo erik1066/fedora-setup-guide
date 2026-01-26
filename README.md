@@ -303,6 +303,7 @@ The following VS Code extensions are handy:
 1. [TSLint](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin)
 1. [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 1. [PostgreSQL by Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-ossdata.vscode-pgsql)
+1. [YAML by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
 
 
 
@@ -336,6 +337,7 @@ code --install-extension ms-python.python
 code --install-extension ms-dotnettools.csdevkit
 code --install-extension ms-mssql.mssql
 code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
+code --install-extension redhat.vscode-yaml
 ```
 
 ## Install JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)

@@ -350,7 +350,7 @@ sudo dnf install -y \
   libicu-devel krb5-devel
 ```
 
-### Step 6: Install .NET sdk
+### Step 6: Install .NET SDK
 
 It's critical that before installing and running .NET, we set two important environment variables. The first ops out of telemetry and the other disables first-run experiences. Neither are useful in the context of a remote code VM.
 
@@ -470,7 +470,7 @@ sudo systemctl restart sshd
 
 JetBrains products, when installed as Flatpaks, cannot 'see' your `~/.ssh` directory the way we've configured them. This is a problem, because we configured the VM to only accept key-based SSH authentication.
 
-Let's create new SSH keys in a directory JetBrains can pick them up from. Do these on the host:
+Let's create new SSH keys in a directory JetBrains can pick them up from. Do these on the **host**:
 
 ```bash
 mkdir -p ~/dev/keys
@@ -645,6 +645,91 @@ cat ~/.ssh/id_ed25519.pub
 ```
 
 Go to GitHub.com and log in. Click on your Profile Picture and select **Settings** > **SSH and GPG Keys**. Click New SSH Key, and paste your public key in the form.
+
+## Fix Fedora Disk Volume Limitations
+
+The root logical volume (fedora-root) is probably much smaller than the disk you allocated in virt-manager. For instance, if you allocated 80 GB, you may only 'see' 15 GB, as well your IDEs like Rider. 
+
+For Rider, this is a problem, as it's disk-hungry and will complain if there's insufficient space. 15 GB will go fast.
+
+First, check to see how much disk space you actually have:
+
+```bash
+df -h
+```
+
+Example output:
+
+```
+Filesystem                          Size  Used Avail Use% 
+Mounted on/dev/mapper/fedora-root   15G   15G  350M  98% /devtmpfs
+...
+```
+
+If you allocated 80G but see substantially less than that in the output, then we're in the below situation:
+
+```
+[ 80 GB virtual disk ]
+        |
+        v
+[ Volume Group: fedora ]
+   ├── fedora-root   (15 GB)  ← full
+   ├── fedora-swap   (some GB)
+   └── FREE SPACE    (~60+ GB)  ← unused
+```
+
+You should take the following steps to expand the disk volume. 
+
+> This guide assumes you are using this VM for purely development purposes; reconsider the commands below if you're using this VM more like a server.
+
+**Step 1:** Confirm disk space actually exists
+
+```bash
+sudo vgs
+```
+
+You should see something like:
+
+```
+VG     #PV #LV #SN Attr   VSize   VFree  
+fedora   1   1   0 wz--n- <78.00g <63.00g
+```
+
+Look specifically for a large `VFree` value.
+
+**Step 2:** Expand the root logical volume (use all free space)
+
+```bash
+sudo lvextend -l +100%FREE /dev/mapper/fedora-root
+```
+
+This only changes the LV size, not the filesystem. 
+
+**Step 3:** Grow the filesystem
+
+Fedora Server uses XFS by default. Grow it:
+
+```bash
+sudo xfs_growfs /
+```
+
+No rebooting is needed.
+
+**Step 4:** Verify
+
+```bash
+df -h /
+```
+
+Now you might see something like this:
+
+```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/fedora-root   78G   16G   63G  21% /
+```
+
+Success. Notice the use% and availabile columns.
+
 
 ## Remote Web Debugging
 

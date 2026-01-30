@@ -554,7 +554,7 @@ sudo dnf install dotnet-sdk-10.0
 Run `dotnet --list-sdks` and look for the following output to verify success:
 
 ```
-10.0.100 [/usr/lib64/dotnet/sdk]
+10.0.102 [/usr/lib64/dotnet/sdk]
 ```
 
 Opt out of .NET's telemetry:

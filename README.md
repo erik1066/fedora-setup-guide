@@ -20,23 +20,37 @@ The terminal output should display `Fedora release 43 (Forty Three)`.
 
 Stop if you get something other than Fedora 43. In that case, this guide may be out-of-date and providing inaccurate information for the version you're using.
 
-## Update the OS and install common tools
+## Update the OS
 
 Update Fedora:
 
 ```bash
-sudo dnf upgrade
+sudo dnf upgrade -y
 ```
 
-Reboot the system once that completes.
+> ⚠️ Reboot the system if the kernal was updated: `sudo reboot`
 
-Check for device firmware updates and install those updates by running the following commands:
+## Update device firmware
+
+Next, let's check for device firmware updates and install them. Firmware matters for WiFi/Bluetooth performance and battery life. Chances are, your computer has some firmware updates available. Run these commands:
 
 ```bash
-fwupdmgr refresh --force
-fwupdmgr get-updates
-fwupdmgr update
+# See what devices can be updated
+sudo fwupdmgr get-devices
+
+# Refresh the firmware database
+sudo fwupdmgr refresh --force
+
+# Check for firmware updates
+sudo fwupdmgr get-updates
+
+# Apply firmware updates
+sudo fwupdmgr update
 ```
+
+> ⚠️ Reboot the system if updates were applied: `sudo reboot`
+
+## Install common development tools
 
 Let's next install some common development tools:
 

@@ -18,7 +18,7 @@ cat /etc/fedora-release
 
 The terminal output should display `Fedora release 43 (Forty Three)`.
 
-Stop if you get something other than Fedora 43. In that case, this guide may be out-of-date and providing inaccurate information for the version you're using.
+> 🚨 Stop if you see output that isn't "Fedora release 43" to avoid following inaccurate instructions.
 
 ## Update the OS
 
@@ -74,13 +74,14 @@ Use the gear icon when logging in to switch to COSMIC.
 
 ## Install Gnome Tweaks
 
-Install Gnome Tweaks:
+Want minimize and maximize buttons on your windows? You need Gnome Tweaks.
+
 
 ```bash
 sudo dnf -y install gnome-tweaks
 ```
 
-Gnome Tweaks will let you add minimize and maximize buttons to windows, change fonts, modify font rendering behavior, and alter the appearance of the UI.
+It'll also let you change fonts, modify font rendering behavior, and alter the appearance of the UI.
 
 ## Install Tilix
 

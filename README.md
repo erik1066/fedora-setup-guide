@@ -198,73 +198,7 @@ And then run it as such:
 flatpak run dev.zed.Zed
 ```
 
-### 4) Obsidian
-
-We'll install the Flatpak version of Obsidian. See https://flathub.org/en/apps/md.obsidian.Obsidian.
-
-```bash
-flatpak install flathub md.obsidian.Obsidian
-```
-
-If you're unconcerned with security-hardening Obsidian then feel free to skip the following hardening steps. Otherwise, let's start the hardening process by baselining the default permissions:
-
-```bash
-flatpak info --show-permissions md.obsidian.Obsidian
-```
-
-Optionally, lock down network access:
-
-```bash
-flatpak override --user md.obsidian.Obsidian --unshare=network
-```
-
-You can also restrict Obsidian from accessing `$HOME`, though we will allow access to specific subfolders in `$HOME` in the next step. The intent is to stop Obsidian from reading sensitive folders in `$HOME` like `~/.ssh`, your financial information, confidential company data, and so on.
-
-```bash
-flatpak override --user md.obsidian.Obsidian --nofilesystem=home
-```
-
-Below shows how you can whitelist a specific folder in `$HOME` that Obsidian can access. You should replace `Documents/Obsidian` with the folder(s) of your choice. If you want to give Obsidian read-only access to a folder, use `:ro` instead of `:rw`.
-
-```bash
-flatpak override --user md.obsidian.Obsidian \
-  --filesystem=$HOME/Documents/Obsidian:rw
-```
-
-We can safely disable communications that it doesn't need access to. Note, if you want notifications from Obsidian, consider deleting that line below.
-
-```bash
-flatpak override --user md.obsidian.Obsidian \
-  --nodevice=all \
-  --no-talk-name=org.freedesktop.secrets \
-  --no-talk-name=org.freedesktop.Notifications
-```
-
-Let's explicitly allow only safe portals:
-
-```bash
-flatpak override --user md.obsidian.Obsidian \
-  --talk-name=org.freedesktop.portal.FileChooser
-```
-
-This allows manual "Open file" dialogs but only when you explicitly choose files. Background scanning is thus not possible.
-
-Let's remove some other stuff it doesn't need:
-
-```bash
-flatpak override --user md.obsidian.Obsidian \
-  --nosocket=ssh-auth \
-  --nofilesystem=xdg-run/gnupg \
-  --nofilesystem=/mnt \
-  --nofilesystem=/media \
-  --nofilesystem=/run/media \
-  --nofilesystem=xdg-run/app/com.discordapp.Discord
-```
-
-Done.
-
-
-### 5) Visual Studio Code
+### 4) Visual Studio Code
 
 **The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2025-11-09**
 
@@ -349,7 +283,7 @@ code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 code --install-extension redhat.vscode-yaml
 ```
 
-### 6) JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
+### 5) JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
 
 **The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox and are current as of 2024-10-08**
 
@@ -365,7 +299,7 @@ tar -xzf jetbrains-toolbox-<build>.tar.gz && cd jetbrains-toolbox-<build> && ./j
 
 If you want to use remote build/execution environments with your JetBrains products instead of doing that on your Fedora 43 workstation, see [the remote code execution guide](remote-execution.md). This guide walks you through setting a Fedora Server VM on your system that will have your build tools; you'll connect to that VM through JetBrains IDEs via SSH. (This can also apply if you have another physical machine on your network that acts as a remote build machine.)
 
-### 7) Postman
+### 6) Postman
 
 Postman is a complete toolchain for API developers.
 
@@ -375,7 +309,7 @@ flatpak install flathub com.getpostman.Postman
 
 ![Postman screenshot in COSMIC desktop environment](<./images/postman01.png>)
 
-### 8) Azure Data Studio
+### 7) Azure Data Studio
 
 **Instructions derived from https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?tabs=linux-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall#tabpanel_1_linux-install**
 
@@ -409,6 +343,192 @@ Or:
 ```
 
 4. Turn off telemetry by navigating to **File** > **Preferences** > **Settings** and searching for "Telemetry", then disabling telemetry for all settings that appeear in the search results.
+
+## Productivity Software
+
+### 1) Only Office
+
+A good alternative to LibreOffice with better support for Microsoft formats.
+
+```bash
+flatpak install flathub org.onlyoffice.desktopeditors
+```
+
+
+<details>
+  <summary><b>Click to expand:</b> 🛡 OnlyOffice post-installation security-hardening guide</summary>
+&nbsp;
+
+#### 1) Generate Baseline Config
+
+Run the app once to generate the sandbox config:
+
+```bash
+flatpak run org.onlyoffice.desktopeditors
+```
+
+Immediately close it. We'll start lockdown procedures next.
+
+What you restrict is up to you and depends on what needs you have. We'll restrict things that are unlikely to be needed for most users:
+
+- Full home directory access
+- Network access (unless you use cloud features)
+- Webcam and microphone
+- Background services
+
+#### 2) Inspect current config
+
+```bash
+flatpak info --show-permissions org.onlyoffice.desktopeditors
+```
+
+This gives you a ground truth to return to later before changing anything.
+
+#### 3) Lock it down (CLI-only, no Flatseal)
+
+**A. Remove broad filesystem access**
+
+By default, many apps get `home` access. Yank it:
+
+```bash
+flatpak override --user --nofilesystem=home org.onlyoffice.desktopeditors
+```
+
+Explicitly allow only a documents subdirectory:
+
+```bash
+flatpak override --user --filesystem=/home/user/Documents/Office:rw org.onlyoffice.desktopeditors
+```
+
+> ⚠️ Replace `user` in the command above with your username.
+
+**B. Kill network access (recommended unless you use cloud features)**
+
+```bash
+flatpak override --user --unshare=network org.onlyoffice.desktopeditors
+```
+
+Doing this:
+- Prevents telemetry
+- Blocks document exfiltration
+- Breaks 'sign into cloud' features by design
+
+You can always re-enable it later.
+
+**C. Remove device access (camera, mic, USB, etc.)**
+
+```bash
+flatpak override --user --nodevice=all org.onlyoffice.desktopeditors
+```
+
+**D. Lock down IPC & portals (safe defaults)**
+
+```bash
+flatpak override --user --no-talk-name=org.freedesktop.secrets org.onlyoffice.desktopeditors
+```
+
+OnlyOffice does not need GNOME keyring unless you’re using cloud auth.
+
+***E. Optional: restrict printing**
+
+```bash
+flatpak override --user --no-talk-name=org.freedesktop.portal.Print org.onlyoffice.desktopeditors
+```
+
+Only do this if you don't plan on printing. However, you can always undo.
+
+#### 4) Verify lockdown succeeded
+
+Recheck permissions:
+
+```bash
+flatpak info --show-permissions org.onlyoffice.desktopeditors
+```
+
+And confirm network isolation:
+
+```bash
+flatpak run org.onlyoffice.desktopeditors
+```
+
+1. Try opening a document = should work
+1. Try signing into cloud = should fail (expected)
+
+This gives you:
+- 📄 Documents access only
+- 🚫 No network
+- 🚫 No devices
+- 🔒 No `$HOME` directory snooping for SSH keys or AWS creds
+
+
+</details>
+
+
+
+### 2) Obsidian
+
+We'll install the Flatpak version of Obsidian. See https://flathub.org/en/apps/md.obsidian.Obsidian.
+
+```bash
+flatpak install flathub md.obsidian.Obsidian
+```
+
+If you're unconcerned with security-hardening Obsidian then feel free to skip the following hardening steps. Otherwise, let's start the hardening process by baselining the default permissions:
+
+```bash
+flatpak info --show-permissions md.obsidian.Obsidian
+```
+
+Optionally, lock down network access:
+
+```bash
+flatpak override --user md.obsidian.Obsidian --unshare=network
+```
+
+You can also restrict Obsidian from accessing `$HOME`, though we will allow access to specific subfolders in `$HOME` in the next step. The intent is to stop Obsidian from reading sensitive folders in `$HOME` like `~/.ssh`, your financial information, confidential company data, and so on.
+
+```bash
+flatpak override --user md.obsidian.Obsidian --nofilesystem=home
+```
+
+Below shows how you can whitelist a specific folder in `$HOME` that Obsidian can access. You should replace `Documents/Obsidian` with the folder(s) of your choice. If you want to give Obsidian read-only access to a folder, use `:ro` instead of `:rw`.
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --filesystem=$HOME/Documents/Obsidian:rw
+```
+
+We can safely disable communications that it doesn't need access to. Note, if you want notifications from Obsidian, consider deleting that line below.
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --nodevice=all \
+  --no-talk-name=org.freedesktop.secrets \
+  --no-talk-name=org.freedesktop.Notifications
+```
+
+Let's explicitly allow only safe portals:
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --talk-name=org.freedesktop.portal.FileChooser
+```
+
+This allows manual "Open file" dialogs but only when you explicitly choose files. Background scanning is thus not possible.
+
+Let's remove some other stuff it doesn't need:
+
+```bash
+flatpak override --user md.obsidian.Obsidian \
+  --nosocket=ssh-auth \
+  --nofilesystem=xdg-run/gnupg \
+  --nofilesystem=/mnt \
+  --nofilesystem=/media \
+  --nofilesystem=/run/media \
+  --nofilesystem=xdg-run/app/com.discordapp.Discord
+```
+
+Done.
 
 
 ## 🔧 Configuration

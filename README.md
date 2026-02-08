@@ -309,41 +309,6 @@ flatpak install flathub com.getpostman.Postman
 
 ![Postman screenshot in COSMIC desktop environment](<./images/postman01.png>)
 
-### 7) Azure Data Studio
-
-**Instructions derived from https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?tabs=linux-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall#tabpanel_1_linux-install**
-
-Azure Data Studio is a cross-platform alternative to Microsoft SQL Server Management Studio (SSMS). It's absent some key features of SSMS, especially those related to database administration.
-
-![Azure Data Studio](<./images/azure-data-studio-01.png>)
-
-Flatpaks or store options to download and install Azure Data Studio are unavailable at the time of writing. We'll use Microsoft's instructions to get it running on Fedora:
-
-1. First, download the [.tar.gz](https://azuredatastudio-update.azurewebsites.net/latest/linux-x64/stable) file.
-1. Run the following commands, replacing `<version string>` and `<your username>`.
-
-```bash
-cd ~
-cp ~/Downloads/azuredatastudio-linux-<version string>.tar.gz ~
-tar -xvf ~/azuredatastudio-linux-<version string>.tar.gz
-echo 'export PATH="$PATH:/home/<your username>/azuredatastudio-linux-x64"' >> ~/.profile
-source ~/.profile
-```
-
-3. Run:
-
-```bash
-azuredatastudio
-```
-
-Or:
-
-```bash
-~/azuredatastudio-linux-x64/azuredatastudio
-```
-
-4. Turn off telemetry by navigating to **File** > **Preferences** > **Settings** and searching for "Telemetry", then disabling telemetry for all settings that appeear in the search results.
-
 ## Productivity Software
 
 ### 1) Only Office

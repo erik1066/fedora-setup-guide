@@ -32,6 +32,7 @@ sudo dnf upgrade -y
 
 > ⚠️ Reboot the system if the kernal was updated: `sudo reboot`
 
+
 ### 3) Update device firmware
 
 Next, let's check for device firmware updates and install them. Firmware matters for WiFi/Bluetooth performance and battery life. Chances are, your computer has some firmware updates available. Run these commands:
@@ -1813,3 +1814,19 @@ sudo sysctl --system
 ```
 
 This prevents local privilege escalation exploits and kernel info leaks.
+
+## Disk cleanup
+
+Perioidically clean things up to reduce disk usage:
+
+```bash
+sudo dnf clean all
+```
+
+> The `clean` command removes cached data that the package manager stores locally. This includes metadata about available software, cached packages that were downloaded but not installed, and temporary files. It can end up at several gigabytes and has no purpose. Keeping it can even expose what packages you've recently searched for or downloaded.
+
+```bash
+sudo dnf autoremove -y
+```
+
+> The `autoremove` command gets rid of packages/dependencies that are left behind when you uninstall something. These are called orphaned packages. Old kernels or large libraries can be huge, so removing these may save substantial space. Additionally, fewer packages = less attack surface since you're not keeping large, unmaintained packages on disk.

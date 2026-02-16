@@ -87,6 +87,56 @@ sudo dnf -y install gnome-tweaks
 
 It'll also let you change fonts, modify font rendering behavior, and alter the appearance of the UI.
 
+
+## Fonts
+
+### Install Fonts from Fedora packages
+
+Some Google fonts, like Inter, are available in the Fedora repositories:
+
+```bash
+sudo dnf install google-inter-fonts -y
+```
+
+### Install Fonts from Google Fonts
+
+If fonts are not available via Fedora repositories:
+
+1. Download the font from Google fonts as a ZIP file to `~/Downloads`
+1. Extract: 
+
+```bash
+unzip Inter.zip
+```
+
+3. Install per-user: 
+
+```bash
+mkdir -p ~/.local/share/fonts/inter
+cp Inter/*.ttf ~/.local/share/fonts/inter/
+fc-cache -f -v
+```
+
+
+### Install Microsoft-equivalent fonts
+
+Google created open source, metric-compatible replacements for the main Microsoft fonts:
+
+| Microsoft Font  | Open Replacement |
+| --------------- | ---------------- |
+| Arial           | Arimo            |
+| Times New Roman | Tinos            |
+| Courier New     | Cousine          |
+| Calibri         | Carlito          |
+
+These are metrically compatible, meaning, documents won't reflow, layout remains identical, and line wrapping stays consistent.
+
+Run this command to install them:
+
+```bash
+sudo dnf install google-arimo-fonts google-tinos-fonts google-cousine-fonts google-carlito-fonts -y
+```
+
 ## 🛠 Install Apps for Software Development (IDEs, terminals, etc.)
 
 ### 1) Tilix
@@ -1722,20 +1772,6 @@ sudo usbguard list-devices -b
 If your device does not appear in the list of blocked devices then you've successfully whitelisted it.
 
 
-## Install Fonts
-
-The easiest way to install a font is to download it, extract the contents, and then double-click on the `.ttf` file. This opens Gnome Font Viewer. In the Gnome Font Viewer window, select the blue **Install** button to install the font.
-
-Alternatively, fonts can be installed by downloading a font and placing it into a ffont family older inside of `/.local/share/fonts`.
-
-Let's walk through what this would look like. First, download the [Inter font from Google Fonts](https://fonts.google.com/specimen/Inter) to your `/Downloads` folder.
-
-```bash
-mkdir -p ~/.local/share/fonts/Inter
-cd ~/Downloads
-unzip Inter.zip -d Inter/
-cp ~/Downloads/Inter-VariableFont_opsz,wght.ttf ~/.local/share/fonts/Inter
-```
 
 ## 🛡 Filesystem security Hardening
 

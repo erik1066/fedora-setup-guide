@@ -1380,11 +1380,19 @@ It's important to ensure that the Windows 11 VM properties are set to use `QXL` 
 
 ## 🌍 Firefox
 
-### Installation
+This section will explain common security and privacy changes to harden Firefix.
 
-For security purposes, it's better to run Firefox as a Flatpak instead of from RPM. Flatpak uses bubblewrap for namespace isolation (mount, PID, network options, etc.) and provides a strong default sandbox at low effort. 
+For security purposes, it _may_ be better to run Firefox as a Flatpak instead of from RPM, depending on your security needs. 
 
-First, install Firefox from Flathub:
+Flatpak uses bubblewrap for namespace isolation (mount, PID, network options, etc.) and provides a strong default sandbox at low effort. You can, for example, restrict Firefox from reading `$HOME` with Flatpak permissions.
+
+However, running Firefox as a Flatpak can introduce problems with hardware acceleration and may interfere with some developer workflows. If you do decide to install and use Firefox from Flathub, see the following subsection.
+
+Skip the Flathub installation section if you want to keep using Firefox from RPM.
+
+### Flathub Installation
+
+Install Firefox from Flathub:
 
 ```bash
 flatpak install flathub org.mozilla.firefox
@@ -1459,7 +1467,7 @@ Attribution is a way to track whether ads served to you were effective in gettin
 privacy.resistFingerprinting = true
 ```
 
-This setting improves your defenses against [browser fingerprinting](https://coveryourtracks.eff.org/learn).
+This setting improves your defenses against [browser fingerprinting](https://coveryourtracks.eff.org/learn). However, it may also break certain site layouts.
 
 ```
 dom.event.clipboardevents.enabled = false
@@ -1471,7 +1479,39 @@ This setting prevents websites from knowing if you used copy or paste commands a
 webgl.disabled = true
 ```
 
-This command disables WebGL. If you never visit sites with WebGL content then it can be safely disabled.
+If you never visit sites with WebGL content then it can be safely disabled. However, disabling WebGL can break some Unity development workflows.
+
+### Set a `user.js` file in your profile directory
+
+To avoid setting and re-setting stuff in `about:config` on every fresh install, you can instead drop a `user.js` file into your profile directory. The `user.js` file will look something like this:
+
+```js
+user_pref("privacy.resistFingerprinting", true);
+user_pref("privacy.query_stripping.enabled", true);
+user_pref("dom.security.https_only_mode", true);
+```
+
+[View a complete user.js designed for developer workstations](/examples/firefox-profile-developer/user.js).
+
+> ⚠️ Values in `user.js` override changes you make to `about:config`, not the other way around.
+
+Place `user.js` files into Firefox profile folders:
+
+```
+~/.mozilla/firefox/<profile-folder>/user.js
+```
+
+### Use different Firefox profiles
+
+You can use different Firefox profiles depending on role. For development, you can create a `user-dev` profile which has some relaxed security/privacy settings for OAuth2 flows, and a `user-browse` profile for when you want stricter privacy and security.
+
+To manage profiles, run:
+
+```bash
+firefox --ProfileManager
+```
+
+Each profile gets its own directory in `~/.mozilla/firefox/` and can therefore have its own `user.js` file.
 
 ## Thunderbird
 

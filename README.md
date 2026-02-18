@@ -489,6 +489,10 @@ We'll install the Flatpak version of Obsidian. See https://flathub.org/en/apps/m
 flatpak install flathub md.obsidian.Obsidian
 ```
 
+<details>
+  <summary><b>Click to expand:</b> 🛡 Obsidian post-installation security-hardening guide</summary>
+&nbsp;
+
 If you're unconcerned with security-hardening Obsidian then feel free to skip the following hardening steps. Otherwise, let's start the hardening process by baselining the default permissions:
 
 ```bash
@@ -545,6 +549,8 @@ flatpak override --user md.obsidian.Obsidian \
 ```
 
 Done.
+
+</details>
 
 
 ## 🔧 Configuration
@@ -1043,6 +1049,11 @@ flatpak install flathub org.blender.Blender
 
 > For Blender, prefer Flathub over Fedora’s Flatpak remote. Fedora’s Flatpak registry is philosophically aligned with Fedora, but Flathub is materially better for Blender in terms of version freshness, completeness, and real-world usability.
 
+<details>
+  <summary><b>Click to expand:</b> 🛡 Blender post-installation security-hardening guide</summary>
+&nbsp;
+
+
 Let's get a security baseline on Blender:
 
 ```bash
@@ -1113,6 +1124,7 @@ Let's do a final audit:
 flatpak info --show-permissions org.blender.Blender
 ```
 
+</details>
 
 ## ▶ Quick Start Guides for Common Scenarios
 ### 1) Set up and connect to a Microsoft SQL Server
@@ -1475,7 +1487,11 @@ Now let's install the [Flatpak](https://flathub.org/en/apps/org.mozilla.Thunderb
 flatpak install flathub org.mozilla.Thunderbird
 ```
 
-### Set Thunderbird Flathub Permissions
+<details>
+  <summary><b>Click to expand:</b> 🛡 Thunderbird post-installation security-hardening guide</summary>
+&nbsp;
+
+### Set Thunderbird Flatpak Permissions
 
 Let's get a baseline of what our permissions are:
 
@@ -1560,6 +1576,8 @@ devices=!all;
 shared=network;
 sockets=!x11;!pulseaudio;!fallback-x11;!cups;
 ```
+
+</details>
 
 ### Thunderbird Security/Privacy Settings
 

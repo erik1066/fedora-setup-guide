@@ -68,3 +68,9 @@ user_pref("security.tls.enable_0rtt_data", false);
 
 // Disable password saving (use Bitwarden instead)
 // user_pref("signon.rememberSignons", false);
+
+// Reject known trackers and partition all other third-party storage. Note that '5' should be the FF default in 2026, so this may be redundant.
+user_pref("network.cookie.cookieBehavior", 5);
+
+// Turn off geolocation features. Note, Google Maps may be less useful with this set to 'false'
+user_pref("geo.enabled", false);

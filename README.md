@@ -228,6 +228,11 @@ chsh -s $(which zsh)
 
 Start a new session. ZSH is now your default shell.
 
+
+<details>
+  <summary><b>Click to expand:</b> Installing Oh-My-ZSH for ZSH config management and ZSH customzation</summary>
+&nbsp;
+
 #### Optional: Install Oh-My-ZSH for ZSH configuration management
 [Oh-My-ZSH](https://github.com/ohmyzsh/ohmyzsh) is an excellent tool for managing your ZSH configuration. Install it using the following command:
 
@@ -278,9 +283,12 @@ plugins=(git dotnet rust golang mvn npm terraform aws gradle)
 
 Save the file. The plugins will be applied to new terminal windows.
 
+</details>
+
+
 ### 3) Zed
 
-**The instructions for installing Zed are derived from https://zed.dev/docs/linux and are current as of 2025-12-25**
+**The instructions for installing Zed are derived from https://zed.dev/docs/linux and are current as of 2026-02-20**
 
 Zed is a highly-efficient, cross-platform code editor written in Rust.
 

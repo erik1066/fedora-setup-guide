@@ -27,10 +27,18 @@ The terminal output should display `Fedora release 43 (Forty Three)`.
 Run:
 
 ```bash
-sudo dnf upgrade -y
+sudo dnf upgrade -y --offline
 ```
 
-> ⚠️ Reboot the system if the kernal was updated: `sudo reboot`
+Then:
+
+```bash
+sudo dnf offline reboot
+```
+
+> ⚠️ Running `sudo dnf offline reboot` will restart the system.
+
+The advantage to adding the `--offline` flag to the standard `sudo dnf upgrade -y` command is system stability and consistency during the update process. Using `--offline` prevents session crashes during live updates that can interrupt `dnf` and leave the system in a broken state.
 
 
 ### 3) Update device firmware

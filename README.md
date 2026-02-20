@@ -503,6 +503,9 @@ flatpak override --user --nofilesystem=~/.gnupg com.getpostman.Postman
 # Prevent Postman from accessing USB devices
 flatpak override --user --nodevice=all com.getpostman.Postman
 
+# Prevent Postman from reading your GitHub SSH keys
+flatpak override --user --nosocket=ssh-auth com.getpostman.Postman
+
 # Prevent Postman from playing sounds
 flatpak override --user --nosocket=pulseaudio com.getpostman.Postman
 
@@ -849,6 +852,9 @@ node app.js
 
 Look for `Hello, world!` in the terminal output to verify success. If all of the above steps work without producing errors, then TypeScript is successfully installed _at the project level_ in your `typescript-test` folder.
 
+<details>
+  <summary><b>Click to expand:</b> TypeScript project creation and TypeScript configuration sections</summary>
+&nbsp;
 
 #### Project creation using tsc
 
@@ -921,6 +927,7 @@ Notice there's an `app.js.map` file in addition to `app.js`.
 
 In Visual Studio Code, open the **Run and Debug** pane, set a breakpoint in `app.ts`, and then select **Run and Debug** on the left side of the window. The breakpoint is hit successfully.
 
+</details>
 
 ### 4) .NET
 

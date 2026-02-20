@@ -1069,6 +1069,122 @@ flatpak install flathub io.podman_desktop.PodmanDesktop
 
 You'll be asked to go through a setup process when running Podman Desktop for the first time. Check all 3 boxes. This will install Podman Compose and `kubectl` system-wide.
 
+<details>
+  <summary><b>Click to expand:</b> 🛡 Podman Desktop post-installation security-hardening guide</summary>
+&nbsp;
+
+Keep Podman in **rootless** mode. Verify:
+
+```bash
+podman info | grep rootless
+```
+
+Look for:
+
+```
+rootless: true
+```
+
+Rootless prevents:
+- Kernel device access
+- Direct system mounts
+- Privileged escalation
+- Persistence outside user namespace
+
+Let's add Flatpak restrictions:
+
+```bash
+# Remove Full Filesystem Access
+flatpak override --nofilesystem=host io.podman_desktop.PodmanDesktop
+
+# Allow specific folders only
+flatpak override \
+  --filesystem=~/dev \
+  io.podman_desktop.PodmanDesktop
+
+# For air-gapped builds only
+# flatpak override --unshare=network io.podman_desktop.PodmanDesktop
+```
+
+Let's edit the trust requirements for container images when they are pulled from a registry:
+
+```bash
+sudo nano /etc/containers/policy.json
+```
+
+Set to:
+
+```json
+{
+  "default": [{ "type": "reject" }],
+  "transports": {
+    "docker": {
+      "quay.io": [{ "type": "insecureAcceptAnything" }],
+      "ghcr.io": [{ "type": "insecureAcceptAnything" }],
+      "registry.fedoraproject.org": [{ "type": "insecureAcceptAnything" }],
+      "mcr.microsoft.com": [{ "type": "insecureAcceptAnything" }]
+    }
+  }
+}
+```
+
+This gives:
+- Registry allowlist
+- No typosquatting
+- No silent Docker Hub
+- Predictable behavior
+- Minimal friction
+
+> To change from `insecureAcceptAnything` to `signedBy` we'd need key management, which adds friction and may not be worth it on a _developer_ workstation. 
+
+Then explicitly trust specific registries. Let's do that next:
+
+```bash
+sudo nano /etc/containers/registries.conf
+```
+
+Find:
+
+```
+unqualified-search-registries = ["registry.fedoraproject.org", "quay.io", "docker.io"]
+```
+
+Change to:
+
+```
+unqualified-search-registries = ["registry.fedoraproject.org", "quay.io", "ghcr.io"]
+```
+
+Notice the removal of `docker.io`. Now if you do a `podman pull nginx` it won't silently default or fall back to Docker Hub.
+
+Next, add this:
+
+```
+[[registry]]
+location = "quay.io"
+insecure = false
+blocked = false
+
+[[registry]]
+location = "ghcr.io"
+insecure = false
+blocked = false
+
+[[registry]]
+location = "registry.fedoraproject.org"
+insecure = false
+blocked = false
+
+[[registry]]
+location = "docker.io"
+blocked = true
+```
+
+Now docker.io is explicitly blocked.
+
+</details>
+
+
 ### Install Kind and Configure with Podman Desktop
 
 In Podman Desktop, find the "Kind" button on the bottom left of the window and select it. A prompt should appear asking if you want to install Kind. Select Yes. Once completed, open a terminal and run the following command to confirm:

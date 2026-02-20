@@ -318,6 +318,57 @@ And then run it as such:
 flatpak run dev.zed.Zed
 ```
 
+
+<details>
+  <summary><b>Click to expand:</b> 🛡 Zed post-installation security-hardening guide (if installed as a Flatpak app)</summary>
+&nbsp;
+
+
+The following commands will tighten the security boundary around Zed:
+
+```bash
+# Allow Zed to access development directories. This assumes ~/dev; change as needed for your system
+flatpak override --user --filesystem=~/dev dev.zed.Zed
+
+# Prevent Zed from broadly accessing $HOME
+flatpak override --user --nofilesystem=home dev.zed.Zed
+
+# Prevent Zed from accessing SSH keys; note, this might break some workflows
+flatpak override --user --nosocket=ssh-auth dev.zed.Zed
+
+# Prevent Zed from accessing the network, *if really paranoid* or using AI-heavy workflows
+# flatpak override --user --share=network=none dev.zed.Zed
+
+# Give Zed just dri device access; that's all it needs
+flatpak override --user --nodevice=all dev.zed.Zed
+flatpak override --user --device=dri dev.zed.Zed
+
+# Prevent Zed from accessing session bus
+flatpak override --user --no-talk-name=org.freedesktop.Flatpak dev.zed.Zed
+
+# Clear potentially dangerous ENV vars
+flatpak override --user \
+  --unset-env=SSH_AUTH_SOCK \
+  --unset-env=AWS_PROFILE \
+  --unset-env=AWS_ACCESS_KEY_ID \
+  --unset-env=AWS_SECRET_ACCESS_KEY \
+  dev.zed.Zed
+
+# Remove X11. We're on Wayland, X11 is nothing but a security hazard
+flatpak override --user --nosocket=x11 dev.zed.Zed
+
+# Explicitly enable Wayland:
+flatpak override --user --socket=wayland dev.zed.Zed
+```
+
+Verify permissions:
+
+```bash
+flatpak info --show-permissions dev.zed.Zed
+```
+
+</details>
+
 ### 4) Visual Studio Code
 
 **The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2025-11-09**

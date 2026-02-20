@@ -83,6 +83,59 @@ sudo reboot
 
 Use the gear icon when logging in to switch to COSMIC.
 
+## Force all Flatpak apps to use Wayland
+
+Let's remove a potential attack surface by restricting Flatpak-based apps from using X11:
+
+```bash
+# Restrict X11 on all Flatpak apps for the current user
+flatpak override --user --nosocket=x11
+
+# Enable Wayland on all Flatpak apps for the current user
+flatpak override --user --socket=wayland
+
+# Tell Electron apps to prefer Wayland over XWayland fallback
+flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=wayland
+```
+
+Global overrides can be inspected via:
+
+```bash
+flatpak override --user --show
+```
+
+Note that some older apps may outright fail without X11. X11 can be re-enabled for a specific app by running `flatpak override --user --socket=x11 com.example.App`.
+
+## Restrict Flatpak apps from sensitive directories
+
+Let's restrict all Flatpak apps from accessing sensitive locations in `$HOME` by default. You can always grant permissions to specific apps on an app-by-app basis later.
+
+```bash
+flatpak override --user \
+  --nofilesystem=~/secure-credentials \
+  --nofilesystem=~/.ssh \
+  --nofilesystem=~/.aws \
+  --nofilesystem=~/.config/gcloud \
+  --nofilesystem=~/.azure \
+  --nofilesystem=~/.gnupg \
+  --nofilesystem=~/.npm \
+  --nofilesystem=~/.nuget \
+  --nofilesystem=~/.pypirc \
+  --nofilesystem=~/.cargo \
+  --nofilesystem=~/.gradle \
+  --nofilesystem=~/.kube \
+  --nofilesystem=~/.docker \
+  --nofilesystem=~/.terraform.d \
+  --nofilesystem=~/.config/gh \
+  --nofilesystem=~/.config/git
+```
+
+These global overrides can be inspected by running:
+
+```bash
+flatpak override --user --show
+```
+
 
 ## Install Gnome Tweaks
 

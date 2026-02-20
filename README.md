@@ -366,7 +366,62 @@ Postman is a complete toolchain for API developers.
 flatpak install flathub com.getpostman.Postman
 ```
 
-![Postman screenshot in COSMIC desktop environment](<./images/postman01.png>)
+
+<details>
+  <summary><b>Click to expand:</b> 🛡 Postman post-installation security-hardening guide</summary>
+&nbsp;
+
+The following commands will tighten the security boundary around Postman:
+
+```bash
+# Create a workspace folder for Postman projects
+mkdir -p ~/dev/apis
+
+# Allow Postman to access the workspace
+flatpak override --user --filesystem=~/dev/apis com.getpostman.Postman
+
+# Prevent Postman from accessing $HOME
+flatpak override --user --nofilesystem=home com.getpostman.Postman
+
+# Prevent Postman from accessing SSH and AWS directories
+flatpak override --user --nofilesystem=~/.ssh com.getpostman.Postman
+flatpak override --user --nofilesystem=~/.aws com.getpostman.Postman
+flatpak override --user --nofilesystem=~/.gnupg com.getpostman.Postman
+
+# Prevent Postman from accessing USB devices
+flatpak override --user --nodevice=all com.getpostman.Postman
+
+# Prevent Postman from playing sounds
+flatpak override --user --nosocket=pulseaudio com.getpostman.Postman
+
+# Remove X11. We're on Wayland, X11 is nothing but a security hazard
+flatpak override --user --nosocket=x11 com.getpostman.Postman
+
+# Explicitly enable Wayland:
+flatpak override --user --socket=wayland com.getpostman.Postman
+```
+
+Verify permissions:
+
+```bash
+flatpak info --show-permissions com.getpostman.Postman
+```
+
+We should see something like:
+
+```ini
+[Context]
+shared=network;ipc;
+sockets=wayland;
+devices=dri;
+filesystems=xdg-config/gtk-4.0:ro;~/dev/apis;
+
+[Session Bus Policy]
+com.canonical.AppMenu.Registrar=talk
+```
+
+</details>
+
 
 ## Productivity Software
 
@@ -377,7 +432,6 @@ A good alternative to LibreOffice with better support for Microsoft formats.
 ```bash
 flatpak install flathub org.onlyoffice.desktopeditors
 ```
-
 
 <details>
   <summary><b>Click to expand:</b> 🛡 OnlyOffice post-installation security-hardening guide</summary>

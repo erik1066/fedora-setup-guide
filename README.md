@@ -136,6 +136,82 @@ These global overrides can be inspected by running:
 flatpak override --user --show
 ```
 
+## Install a password manager (KeePassXC)
+
+We'll skip BitWarden install since that's client-server architecture and focus on something that's 100% local for the purposes of this guide.
+
+```bash
+flatpak install flathub org.keepassxc.KeePassXC
+```
+
+
+<details>
+  <summary><b>Click to expand:</b> 🛡 KeePassXC post-installation security-hardening guide</summary>
+&nbsp;
+
+Let's create a special folder for the KeePass vault:
+
+```bash
+mkdir -p ~/Documents/KeePassVault
+chmod 700 ~/Documents/KeePassVault
+```
+
+This is where the `.kdbx` file will go.
+
+Next, set Flatpak overrides:
+
+```bash
+# Restrict KeePass to just the special vault folder:
+flatpak override --user org.keepassxc.KeePassXC \
+  --nofilesystem=host \
+  --nofilesystem=home \
+  --filesystem=xdg-documents/KeePassVault:rw
+
+# Block KeePass from using the network:
+flatpak override --user org.keepassxc.KeePassXC --unshare=network
+
+# Block X11. However, this breaks auto-type, so beware.
+flatpak override --user org.keepassxc.KeePassXC \
+  --socket=wayland \
+  --nosocket=x11
+
+# Block SSH, unless you use KeePass for this
+flatpak override --user --nosocket=ssh-auth org.keepassxc.KeePassXC
+flatpak override --user org.keepassxc.KeePassXC --unset-env=SSH_AUTH_SOCK
+
+# Block access to hardware tokens, unless you use KeePass for this:
+flatpak override --user org.keepassxc.KeePassXC --nodevice=pcsc
+
+# If you don't need apps to query KeePass as a keyring you can disable:
+flatpak override --user org.keepassxc.KeePassXC \
+  --no-own-name=org.freedesktop.secrets
+```
+
+To show overrides:
+
+```bash
+flatpak override --user --show org.keepassxc.KeePassXC
+```
+
+KeePassXC now:
+
+- ❌ Cannot access Internet
+- ❌ Cannot access SSH agent
+- ❌ Cannot access ~/.ssh
+- ❌ Cannot read your AWS creds
+- ❌ Cannot read GitHub tokens
+- ❌ Cannot scan your home directory
+- ❌ Cannot auto-type into other apps
+- ✔ Can open only your vault folder
+- ✔ Can copy passwords to clipboard
+- ✔ Can run under Wayland
+
+In case anything goes wrong, you can reset all overrides for KeePass to start over on overrides:
+
+```bash
+flatpak override --user --reset org.keepassxc.KeePassXC
+```
+
 
 ## Install Gnome Tweaks
 

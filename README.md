@@ -178,13 +178,6 @@ flatpak override --user org.keepassxc.KeePassXC \
 # Block SSH, unless you use KeePass for this
 flatpak override --user --nosocket=ssh-auth org.keepassxc.KeePassXC
 flatpak override --user org.keepassxc.KeePassXC --unset-env=SSH_AUTH_SOCK
-
-# Block access to hardware tokens, unless you use KeePass for this:
-flatpak override --user org.keepassxc.KeePassXC --nodevice=pcsc
-
-# If you don't need apps to query KeePass as a keyring you can disable:
-flatpak override --user org.keepassxc.KeePassXC \
-  --no-own-name=org.freedesktop.secrets
 ```
 
 To show overrides:

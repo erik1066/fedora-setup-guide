@@ -212,6 +212,7 @@ In case anything goes wrong, you can reset all overrides for KeePass to start ov
 flatpak override --user --reset org.keepassxc.KeePassXC
 ```
 
+</details>
 
 ## Install Gnome Tweaks
 

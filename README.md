@@ -407,7 +407,7 @@ flatpak override --user --nofilesystem=home dev.zed.Zed
 flatpak override --user --nosocket=ssh-auth dev.zed.Zed
 
 # Prevent Zed from accessing the network, *if really paranoid* or using AI-heavy workflows
-# flatpak override --user --share=network=none dev.zed.Zed
+# flatpak override --user --unshare=network dev.zed.Zed
 
 # Give Zed just dri device access; that's all it needs
 flatpak override --user --nodevice=all dev.zed.Zed
@@ -431,10 +431,10 @@ flatpak override --user --nosocket=x11 dev.zed.Zed
 flatpak override --user --socket=wayland dev.zed.Zed
 ```
 
-Verify permissions:
+Verify overrides:
 
 ```bash
-flatpak info --show-permissions dev.zed.Zed
+flatpak override --user --show dev.zed.Zed
 ```
 
 </details>

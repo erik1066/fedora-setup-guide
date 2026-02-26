@@ -396,7 +396,6 @@ And then run it as such:
 flatpak run dev.zed.Zed
 ```
 
-
 <details>
   <summary><b>Click to expand:</b> 🛡 Zed post-installation security-hardening guide (if installed as a Flatpak app)</summary>
 &nbsp;
@@ -408,8 +407,11 @@ The following commands will tighten the security boundary around Zed:
 # Allow Zed to access development directories. This assumes ~/dev; change as needed for your system
 flatpak override --user --filesystem=~/dev dev.zed.Zed
 
-# Prevent Zed from broadly accessing $HOME
+# Prevent Zed from broadly accessing $HOME and specific sensitive directories
 flatpak override --user --nofilesystem=home dev.zed.Zed
+flatpak override --user --nofilesystem=~/.ssh dev.zed.Zed
+flatpak override --user --nofilesystem=~/.aws dev.zed.Zed
+flatpak override --user --nofilesystem=~/.gnupg dev.zed.Zed
 
 # Prevent Zed from accessing SSH keys; note, this might break some workflows
 flatpak override --user --nosocket=ssh-auth dev.zed.Zed
@@ -417,12 +419,18 @@ flatpak override --user --nosocket=ssh-auth dev.zed.Zed
 # Prevent Zed from accessing the network, *if really paranoid* or using AI-heavy workflows
 # flatpak override --user --unshare=network dev.zed.Zed
 
-# Give Zed just dri device access; that's all it needs
+# Give Zed just dri device access, which ensures it uses the GPU for Vulkan rendering
 flatpak override --user --nodevice=all dev.zed.Zed
 flatpak override --user --device=dri dev.zed.Zed
 
 # Prevent Zed from accessing session bus
 flatpak override --user --no-talk-name=org.freedesktop.Flatpak dev.zed.Zed
+
+# Block the background "bus" communication often used for spying
+flatpak override --user --nosocket=session-bus dev.zed.Zed
+
+# Remove the permission that allows running commands on the host
+flatpak override --user --unsetopt=context.talk-name=org.freedesktop.Flatpak dev.zed.Zed
 
 # Clear potentially dangerous ENV vars
 flatpak override --user \
@@ -439,10 +447,20 @@ flatpak override --user --nosocket=x11 dev.zed.Zed
 flatpak override --user --socket=wayland dev.zed.Zed
 ```
 
+Zed's terminal will feel broken after running these commands. That's because we'll have prevented Zed from communicating with toolchains on the host system. You will need to install the necessary SDKs via Flatpak to make the editor functional again.
+
 Verify overrides:
 
 ```bash
 flatpak override --user --show dev.zed.Zed
+```
+
+The `--show` flag means the command's output will display the diff between the app's default settings and your custom rules.
+
+To see the final, combined permission set (defaults + your overrides), use:
+
+```bash
+flatpak info --show-permissions dev.zed.Zed
 ```
 
 </details>
@@ -664,6 +682,16 @@ flatpak override --user --socket=wayland com.usebruno.Bruno
 
 # Give the Electron runtime the right hint to use Wayland
 flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto com.usebruno.Bruno
+```
+
+You can further lock down Bruno by preventing it from talking to other running apps and services. However, _these commands may break some Bruno functionality_. Use care.
+
+```bash
+# Prevent all communication on the Session Bus
+flatpak override --user --nosocket=session-bus com.usebruno.Bruno
+
+# Prevent all communication on the System Bus
+flatpak override --user --nosocket=system-bus com.usebruno.Bruno
 ```
 
 Verify your overrides:

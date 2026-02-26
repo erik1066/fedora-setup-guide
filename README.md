@@ -615,6 +615,73 @@ com.canonical.AppMenu.Registrar=talk
 
 </details>
 
+### 7) Bruno
+
+Bruno is an alternative to Postman for API development.
+
+```bash
+flatpak install flathub com.usebruno.Bruno
+```
+
+<details>
+  <summary><b>Click to expand:</b> 🛡 Bruno post-installation security-hardening guide</summary>
+&nbsp;
+
+The following commands will tighten the security boundary around Bruno:
+
+```bash
+# Create a workspace folder for API projects
+mkdir -p ~/dev/apis
+
+# Allow to access the workspace
+flatpak override --user --filesystem=~/dev/apis com.usebruno.Bruno
+
+# Prevent accessing $HOME
+flatpak override --user --nofilesystem=home com.usebruno.Bruno
+
+# Prevent accessing SSH and AWS directories
+flatpak override --user --nofilesystem=~/.ssh com.usebruno.Bruno
+flatpak override --user --nofilesystem=~/.aws com.usebruno.Bruno
+flatpak override --user --nofilesystem=~/.gnupg com.usebruno.Bruno
+
+# Prevent accessing USB devices
+flatpak override --user --nodevice=all com.usebruno.Bruno
+
+# Re-enable GPU for smooth UI
+flatpak override --user --device=dri com.usebruno.Bruno 
+
+# Prevent reading your GitHub SSH keys
+flatpak override --user --nosocket=ssh-auth com.usebruno.Bruno
+
+# Prevent playing sounds
+flatpak override --user --nosocket=pulseaudio com.usebruno.Bruno
+
+# Remove X11. We're on Wayland, X11 is nothing but a security hazard
+flatpak override --user --nosocket=x11 com.usebruno.Bruno
+
+# Explicitly enable Wayland:
+flatpak override --user --socket=wayland com.usebruno.Bruno
+
+# Give the Electron runtime the right hint to use Wayland
+flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto com.usebruno.Bruno
+```
+
+Verify your overrides:
+
+```bash
+flatpak override --user --show com.usebruno.Bruno
+```
+
+This shows only the diff between the app's default settings and your custom rules.
+
+To see the final, combined permission set (defaults + your overrides), use:
+
+```bash
+flatpak info --show-permissions com.usebruno.Bruno
+```
+
+</details>
+
 
 ## Productivity Software
 

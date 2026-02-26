@@ -69,6 +69,14 @@ Let's next install some common and useful development tools:
 sudo dnf -y install make curl
 ```
 
+## Add Flathub
+
+```bash
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+```
+
+> See https://flathub.org/en/setup/Fedora.
+
 ## Install the COSMIC Desktop Environment
 
 Run the subsequent commands if you want the option of using System76's COSMIC desktop environment. COSMIC is shown in the screenshot at the beginning of this README. 

@@ -429,9 +429,6 @@ flatpak override --user --no-talk-name=org.freedesktop.Flatpak dev.zed.Zed
 # Block the background "bus" communication often used for spying
 flatpak override --user --nosocket=session-bus dev.zed.Zed
 
-# Remove the permission that allows running commands on the host
-flatpak override --user --unsetopt=context.talk-name=org.freedesktop.Flatpak dev.zed.Zed
-
 # Clear potentially dangerous ENV vars
 flatpak override --user \
   --unset-env=SSH_AUTH_SOCK \

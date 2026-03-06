@@ -66,7 +66,7 @@ sudo fwupdmgr update
 Let's next install some common and useful development tools:
 
 ```bash
-sudo dnf -y install make curl
+sudo dnf -y install make curl git
 ```
 
 ## Add Flathub

@@ -1978,7 +1978,7 @@ To manage profiles, run:
 firefox --ProfileManager
 ```
 
-Each profile gets its own directory in `~/.mozilla/firefox/` and can therefore have its own `user.js` file.
+Each profile gets its own directory in `~/.config/mozilla/firefox/` and can therefore have its own `user.js` file.
 
 ## Thunderbird
 

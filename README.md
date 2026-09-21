@@ -1472,8 +1472,8 @@ sudo sh -c 'echo -e "[unityhub]\nname=Unity Hub\nbaseurl=https://hub.unity3d.com
 Update the package cache and install:
 
 ```bash
-sudo yum check-update
-sudo yum install unityhub
+sudo dnf check-update
+sudo dnf install unityhub
 ```
 
 You can now run the **Unity Hub** app. Once logged in, select **Install Unity Editor**.

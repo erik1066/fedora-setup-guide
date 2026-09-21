@@ -549,13 +549,21 @@ code --install-extension redhat.vscode-yaml
 
 ### 5) JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
 
-**The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox and are current as of 2024-10-08**
+**The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox_linux and are current as of 2026-09-20**
 
 1. Visit https://www.jetbrains.com/toolbox/app/ and download the JetBrains Toolbox app.
 1. Run the following command, replacing the build number in the script below with the build number of the file name you downloaded:
 
 ```bash
-tar -xzf jetbrains-toolbox-<build>.tar.gz && cd jetbrains-toolbox-<build> && ./jetbrains-toolbox
+mkdir -p ~/.local/opt
+tar -xvf jetbrains-toolbox-<version>.tar.gz -C ~/.local/opt
+cd ~/.local/opt/jetbrains-toolbox-<version>
+```
+
+Then run:
+
+```bash
+./bin/jetbrains-toolbox
 ```
 
 3. Select the product that you want to install.

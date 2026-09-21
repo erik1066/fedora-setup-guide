@@ -1,6 +1,6 @@
-# Fedora 43 Setup Guide
+# Fedora 44 Setup Guide
 
-This repository contains instructions to set up Fedora 43 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
+This repository contains instructions to set up Fedora 44 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
@@ -12,15 +12,15 @@ Proceed at your own risk and verify each command before executing that command. 
 
 ### 1) Check Fedora Version
 
-Let's make sure we're on Fedora 43, which is the version of Fedora this setup guide is written for:
+Let's make sure we're on Fedora 44, which is the version of Fedora this setup guide is written for:
 
 ```bash
 cat /etc/fedora-release
 ```
 
-The terminal output should display `Fedora release 43 (Forty Three)`.
+The terminal output should display `Fedora release 44 (Forty Four)`.
 
-> 🚨 Stop if you see output that isn't "Fedora release 43" to avoid following inaccurate instructions.
+> 🚨 Stop if you see output that isn't "Fedora release 44" to avoid following inaccurate instructions.
 
 ### 2) Apply updates
 
@@ -712,7 +712,7 @@ flatpak info --show-permissions com.usebruno.Bruno
 
 ### 1) Only Office
 
-A good alternative to LibreOffice with better support for Microsoft formats.
+A good alternative to LibreOffice with support for Microsoft formats.
 
 ```bash
 flatpak install flathub org.onlyoffice.desktopeditors
@@ -1108,7 +1108,7 @@ sudo dnf install dotnet-sdk-10.0
 Run `dotnet --list-sdks` and look for the following output to verify success:
 
 ```
-10.0.102 [/usr/lib64/dotnet/sdk]
+10.0.111 [/usr/lib64/dotnet/sdk]
 ```
 
 Opt out of .NET's telemetry:
@@ -1131,10 +1131,10 @@ sudo dnf install go
 Using `dnf` will likely install a slightly oudated version of Go. You can alternatively run the following commands to install an up-to-date version of Go. Be sure to replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
 
 ```bash
-curl -OL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz
-sha256sum go1.25.6.linux-amd64.tar.gz
+curl -OL https://go.dev/dl/go1.27.1.linux-amd64.tar.gz
+sha256sum go1.27.1.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.25.6.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.27.1.linux-amd64.tar.gz
 ```
 
 If you are upgrading Go using these commands, then run the following command to verify success:
@@ -1143,7 +1143,7 @@ If you are upgrading Go using these commands, then run the following command to 
 go version
 ```
 
-Look for `go version go1.25.6 linux/amd64` (or newer).
+Look for `go version go1.27.1 linux/amd64` (or newer).
 
 If this is a first-time installation of Go, then running `go version` is likely to display the following output:
 
@@ -1165,7 +1165,7 @@ Now run `go version` and you should see the expected version number output to th
 
 ### 6) Terraform
 
-**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install on 2025-11-09**
+**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install#linux on 2026-09-20**
 
 
 ```bash
@@ -1514,7 +1514,7 @@ If we're installing Unity, we probably want Blender, too.
 flatpak install flathub org.blender.Blender
 ```
 
-> For Blender, prefer Flathub over Fedora’s Flatpak remote. Fedora’s Flatpak registry is philosophically aligned with Fedora, but Flathub is materially better for Blender in terms of version freshness, completeness, and real-world usability.
+> For Blender, prefer Flathub over Fedora’s Flatpak remote. Fedora’s Flatpak registry is philosophically aligned with Fedora, but Flathub is better for Blender in terms of version freshness and real-world usability.
 
 <details>
   <summary><b>Click to expand:</b> 🛡 Blender post-installation security-hardening guide</summary>
@@ -1569,7 +1569,7 @@ flatpak override --user \
   org.blender.Blender
 ```
 
-Be sure ot change the `/home/you/dev/...` path to whatever your actual path(s) are that you want to grant permission to.
+Be sure to change the `/home/you/dev/...` path to whatever your actual path(s) are that you want to grant permission to.
 
 If you **don't** use online asset browsers, cloud sync, or add-on downloads from inside Blender, then you can disable network access:
 
@@ -1808,7 +1808,7 @@ Now log out and log in again.
 
 ```bash
 cd ~/Downloads
-sudo mv Fedora-Silverblue-ostree-x86_64-43-1.6.iso /var/lib/libvirt/images
+sudo mv Fedora-Silverblue-ostree-x86_64-44-1.7.iso /var/lib/libvirt/images
 ```
 
 3. Open the **Virtual Machine Manager** (aka `virt-manager`)
@@ -2355,7 +2355,8 @@ kernel.unprivileged_bpf_disabled = 1
 kernel.dmesg_restrict = 1  
 
 # Protect hardlinks/symlinks 
-fs.protected_hardlinks = 1 fs.protected_symlinks = 1  
+fs.protected_hardlinks = 1 
+fs.protected_symlinks = 1  
 
 # ASLR full 
 kernel.randomize_va_space = 2

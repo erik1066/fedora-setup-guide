@@ -32,10 +32,10 @@ sudo dnf -y install tilix
 # Install ZShell
 ###########################
 
-sudo dnf -y install zsh
-chsh -s $(which zsh)
-sudo dnf -y install zsh-syntax-highlighting
-echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+# sudo dnf -y install zsh
+# chsh -s $(which zsh)
+# sudo dnf -y install zsh-syntax-highlighting
+# echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
 
 
 ###########################
@@ -70,14 +70,22 @@ code --install-extension lakshits11.neon-city
 # Install Postman
 ###########################
 
-flatpak install flathub com.getpostman.Postman
+# flatpak install flathub com.getpostman.Postman
+
+
+###########################
+# Install Bruno
+###########################
+
+flatpak install flathub com.usebruno.Bruno
+
 
 
 ###########################
 # Install NodeJS and NPM
 ###########################
 
-sudo dnf -y install nodejs
+# sudo dnf -y install nodejs
 
 
 ###########################
@@ -136,5 +144,5 @@ sudo usermod -a -G libvirt $(whoami)
 # Install Firefox (Flathub)
 ###########################
 
-sudo dnf remove firefox
-flatpak install flathub org.mozilla.firefox
+# sudo dnf remove firefox
+# flatpak install flathub org.mozilla.firefox

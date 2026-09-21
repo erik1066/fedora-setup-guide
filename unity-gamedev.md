@@ -27,16 +27,24 @@ An example of how to run Zed as `devuser` is below.
 ```bash
 sudo systemd-run --user --machine=devuser@.host --scope \
     --property=NoNewPrivileges=yes \
-    --property=RestrictAddressFamilies=none \
+    --property=ProtectSystem=strict \
+    --property=PrivateTmp=yes \
+    --property=ProtectKernelTunables=yes \
+    --property=ProtectKernelModules=yes \
+    --property=ProtectControlGroups=yes \
     --property=ProtectHome=read-only \
     /usr/bin/zed
 ```
 
 - `--machine=devuser@.host`: Runs the command as `devuser`, a non-privileged account.
 - `--scope`: Runs the command as a child of your current shell but managed by systemd.
-- `RestrictAddressFamilies=none`: Completely disables all networking (IPv4, IPv6, etc.). The app will see "Network Unreachable."
 - `NoNewPrivileges=yes`: The absolute "Anti-Sudo" flag. It prevents the process (and any of its children) from ever gaining new privileges via setuid binaries like sudo.
 - `ProtectHome=read-only`: Prevents the tool from modifying your personal files, allowing it only to read them. 
+- `ProtectKernelTunables=yes`: IDE has no business changing these.
+- `ProtectKernelModules=yes`: IDE has no business changing these, either.
+- `ProtectSystem=strict`: Makes most of OS filesystem read-only
+
+Some advice will suggest setting `RestrictAddressFamilies=none`. This completely disables all networking (IPv4, IPv6, etc.). The app will see "Network Unreachable." This can also have other side effects; it's not recommended to set it at this time.
 
 > Understand that removing network access from Zed will prevent you from downloading extensions. Making `$HOME` read-only will prevent you from updating files in your home directory.
 

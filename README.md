@@ -1965,7 +1965,7 @@ user_pref("dom.security.https_only_mode", true);
 Place `user.js` files into Firefox profile folders:
 
 ```
-~/.mozilla/firefox/<profile-folder>/user.js
+~/.config/mozilla/firefox/<profile-folder>/user.js
 ```
 
 ### Use different Firefox profiles

@@ -1,6 +1,6 @@
-# Fedora 43 Setup Guide
+# Fedora 44 Setup Guide
 
-This repository contains instructions to set up Fedora 43 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
+This repository contains instructions to set up Fedora 44 Workstation for developing software in Go, Rust, C# (.NET Core), Java, and other languages.
 
 > See [Pop!_OS Setup Guide](https://github.com/erik1066/pop-os-setup) for a version of this guide specific to Pop!_OS and Ubuntu.
 
@@ -12,15 +12,15 @@ Proceed at your own risk and verify each command before executing that command. 
 
 ### 1) Check Fedora Version
 
-Let's make sure we're on Fedora 43, which is the version of Fedora this setup guide is written for:
+Let's make sure we're on Fedora 44, which is the version of Fedora this setup guide is written for:
 
 ```bash
 cat /etc/fedora-release
 ```
 
-The terminal output should display `Fedora release 43 (Forty Three)`.
+The terminal output should display `Fedora release 44 (Forty Four)`.
 
-> 🚨 Stop if you see output that isn't "Fedora release 43" to avoid following inaccurate instructions.
+> 🚨 Stop if you see output that isn't "Fedora release 44" to avoid following inaccurate instructions.
 
 ### 2) Apply updates
 
@@ -149,71 +149,9 @@ flatpak override --user --show
 We'll skip BitWarden install since that's client-server architecture and focus on something that's 100% local for the purposes of this guide.
 
 ```bash
-flatpak install flathub org.keepassxc.KeePassXC
+sudo dnf install keepassxc
 ```
 
-
-<details>
-  <summary><b>Click to expand:</b> 🛡 KeePassXC post-installation security-hardening guide</summary>
-&nbsp;
-
-Let's create a special folder for the KeePass vault:
-
-```bash
-mkdir -p ~/Documents/KeePassVault
-chmod 700 ~/Documents/KeePassVault
-```
-
-This is where the `.kdbx` file will go.
-
-Next, set Flatpak overrides:
-
-```bash
-# Restrict KeePass to just the special vault folder:
-flatpak override --user org.keepassxc.KeePassXC \
-  --nofilesystem=host \
-  --nofilesystem=home \
-  --filesystem=xdg-documents/KeePassVault:rw
-
-# Block KeePass from using the network:
-flatpak override --user org.keepassxc.KeePassXC --unshare=network
-
-# Block X11. However, this breaks auto-type, so beware.
-flatpak override --user org.keepassxc.KeePassXC \
-  --socket=wayland \
-  --nosocket=x11
-
-# Block SSH, unless you use KeePass for this
-flatpak override --user --nosocket=ssh-auth org.keepassxc.KeePassXC
-flatpak override --user org.keepassxc.KeePassXC --unset-env=SSH_AUTH_SOCK
-```
-
-To show overrides:
-
-```bash
-flatpak override --user --show org.keepassxc.KeePassXC
-```
-
-KeePassXC now:
-
-- ❌ Cannot access Internet
-- ❌ Cannot access SSH agent
-- ❌ Cannot access ~/.ssh
-- ❌ Cannot read your AWS creds
-- ❌ Cannot read GitHub tokens
-- ❌ Cannot scan your home directory
-- ❌ Cannot auto-type into other apps
-- ✔ Can open only your vault folder
-- ✔ Can copy passwords to clipboard
-- ✔ Can run under Wayland
-
-In case anything goes wrong, you can reset all overrides for KeePass to start over on overrides:
-
-```bash
-flatpak override --user --reset org.keepassxc.KeePassXC
-```
-
-</details>
 
 ## Install Gnome Tweaks
 
@@ -549,13 +487,21 @@ code --install-extension redhat.vscode-yaml
 
 ### 5) JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
 
-**The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox and are current as of 2024-10-08**
+**The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox_linux and are current as of 2026-09-20**
 
 1. Visit https://www.jetbrains.com/toolbox/app/ and download the JetBrains Toolbox app.
 1. Run the following command, replacing the build number in the script below with the build number of the file name you downloaded:
 
 ```bash
-tar -xzf jetbrains-toolbox-<build>.tar.gz && cd jetbrains-toolbox-<build> && ./jetbrains-toolbox
+mkdir -p ~/.local/opt
+tar -xvf jetbrains-toolbox-<version>.tar.gz -C ~/.local/opt
+cd ~/.local/opt/jetbrains-toolbox-<version>
+```
+
+Then run:
+
+```bash
+./bin/jetbrains-toolbox
 ```
 
 3. Select the product that you want to install.
@@ -712,7 +658,7 @@ flatpak info --show-permissions com.usebruno.Bruno
 
 ### 1) Only Office
 
-A good alternative to LibreOffice with better support for Microsoft formats.
+A good alternative to LibreOffice with support for Microsoft formats.
 
 ```bash
 flatpak install flathub org.onlyoffice.desktopeditors
@@ -1108,7 +1054,7 @@ sudo dnf install dotnet-sdk-10.0
 Run `dotnet --list-sdks` and look for the following output to verify success:
 
 ```
-10.0.102 [/usr/lib64/dotnet/sdk]
+10.0.111 [/usr/lib64/dotnet/sdk]
 ```
 
 Opt out of .NET's telemetry:
@@ -1131,10 +1077,10 @@ sudo dnf install go
 Using `dnf` will likely install a slightly oudated version of Go. You can alternatively run the following commands to install an up-to-date version of Go. Be sure to replace the version number in the commands below with the version number you want to install. These are the same commands you will use to update Go to a newer version.
 
 ```bash
-curl -OL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz
-sha256sum go1.25.6.linux-amd64.tar.gz
+curl -OL https://go.dev/dl/go1.27.1.linux-amd64.tar.gz
+sha256sum go1.27.1.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.25.6.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.27.1.linux-amd64.tar.gz
 ```
 
 If you are upgrading Go using these commands, then run the following command to verify success:
@@ -1143,7 +1089,7 @@ If you are upgrading Go using these commands, then run the following command to 
 go version
 ```
 
-Look for `go version go1.25.6 linux/amd64` (or newer).
+Look for `go version go1.27.1 linux/amd64` (or newer).
 
 If this is a first-time installation of Go, then running `go version` is likely to display the following output:
 
@@ -1165,7 +1111,7 @@ Now run `go version` and you should see the expected version number output to th
 
 ### 6) Terraform
 
-**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install on 2025-11-09**
+**Instructions for installing Terraform taken from https://developer.hashicorp.com/terraform/install#linux on 2026-09-20**
 
 
 ```bash
@@ -1472,8 +1418,8 @@ sudo sh -c 'echo -e "[unityhub]\nname=Unity Hub\nbaseurl=https://hub.unity3d.com
 Update the package cache and install:
 
 ```bash
-sudo yum check-update
-sudo yum install unityhub
+sudo dnf check-update
+sudo dnf install unityhub
 ```
 
 You can now run the **Unity Hub** app. Once logged in, select **Install Unity Editor**.
@@ -1514,7 +1460,7 @@ If we're installing Unity, we probably want Blender, too.
 flatpak install flathub org.blender.Blender
 ```
 
-> For Blender, prefer Flathub over Fedora’s Flatpak remote. Fedora’s Flatpak registry is philosophically aligned with Fedora, but Flathub is materially better for Blender in terms of version freshness, completeness, and real-world usability.
+> For Blender, prefer Flathub over Fedora’s Flatpak remote. Fedora’s Flatpak registry is philosophically aligned with Fedora, but Flathub is better for Blender in terms of version freshness and real-world usability.
 
 <details>
   <summary><b>Click to expand:</b> 🛡 Blender post-installation security-hardening guide</summary>
@@ -1569,7 +1515,7 @@ flatpak override --user \
   org.blender.Blender
 ```
 
-Be sure ot change the `/home/you/dev/...` path to whatever your actual path(s) are that you want to grant permission to.
+Be sure to change the `/home/you/dev/...` path to whatever your actual path(s) are that you want to grant permission to.
 
 If you **don't** use online asset browsers, cloud sync, or add-on downloads from inside Blender, then you can disable network access:
 
@@ -1808,7 +1754,7 @@ Now log out and log in again.
 
 ```bash
 cd ~/Downloads
-sudo mv Fedora-Silverblue-ostree-x86_64-43-1.6.iso /var/lib/libvirt/images
+sudo mv Fedora-Silverblue-ostree-x86_64-44-1.7.iso /var/lib/libvirt/images
 ```
 
 3. Open the **Virtual Machine Manager** (aka `virt-manager`)
@@ -1965,7 +1911,7 @@ user_pref("dom.security.https_only_mode", true);
 Place `user.js` files into Firefox profile folders:
 
 ```
-~/.mozilla/firefox/<profile-folder>/user.js
+~/.config/mozilla/firefox/<profile-folder>/user.js
 ```
 
 ### Use different Firefox profiles
@@ -1978,7 +1924,7 @@ To manage profiles, run:
 firefox --ProfileManager
 ```
 
-Each profile gets its own directory in `~/.mozilla/firefox/` and can therefore have its own `user.js` file.
+Each profile gets its own directory in `~/.config/mozilla/firefox/` and can therefore have its own `user.js` file.
 
 ## Thunderbird
 
@@ -2355,7 +2301,8 @@ kernel.unprivileged_bpf_disabled = 1
 kernel.dmesg_restrict = 1  
 
 # Protect hardlinks/symlinks 
-fs.protected_hardlinks = 1 fs.protected_symlinks = 1  
+fs.protected_hardlinks = 1 
+fs.protected_symlinks = 1  
 
 # ASLR full 
 kernel.randomize_va_space = 2

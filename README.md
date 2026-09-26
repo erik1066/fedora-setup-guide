@@ -485,6 +485,76 @@ code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 code --install-extension redhat.vscode-yaml
 ```
 
+#### Hardening VS Code using systemd
+
+<details>
+  <summary><b>Click to expand:</b> 🛡 VS Code post-installation security-hardening guide</summary>
+&nbsp;
+
+For hardening, we can use a lightweight systemd policy:
+
+```bash
+systemd-run --user \
+  --unit=vscode-hardened \
+  --collect \
+  --property=Type=exec \
+  --property=NoNewPrivileges=yes \
+  --property=RestrictSUIDSGID=yes \
+  /usr/bin/code
+```
+
+Let's create a wrapper:
+
+```bash
+nano ~/.local/bin/code-hardened
+```
+
+Enter: 
+
+```bash
+#!/usr/bin/env bash
+
+exec systemd-run --user \
+  --unit=vscode-hardened \
+  --collect \
+  --property=Type=exec \
+  --property=NoNewPrivileges=yes \
+  --property=RestrictSUIDSGID=yes \
+  /usr/bin/code "$@"
+```
+
+Then in a terminal:
+
+```bash
+chmod 700 ~/.local/bin/code-hardened
+```
+
+In a terminal, you can now run:
+
+```bash
+code-hardened
+```
+
+Verify:
+
+```bash
+
+
+systemctl --user show vscode-hardened.service \
+  -p NoNewPrivileges \
+  -p RestrictSUIDSGID
+```
+
+Expected output:
+
+```
+NoNewPrivileges=yes
+RestrictSUIDSGID=yes
+```
+
+</details>
+
+
 ### 5) JetBrains products (Rider, GoLand, IntelliJ IDEA Ultimate, etc)
 
 **The instructions for installing JetBrains products are derived from https://www.jetbrains.com/help/idea/installation-guide.html#toolbox_linux and are current as of 2026-09-20**

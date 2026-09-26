@@ -402,14 +402,14 @@ flatpak info --show-permissions dev.zed.Zed
 
 ### 4) Visual Studio Code
 
-**The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2025-11-09**
+**The instructions for installing Visual Studio Code are derived from https://code.visualstudio.com/docs/setup/linux and are current as of 2026-09-26**
 
 1. Run the following commands:
 
 ```bash
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc &&
 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-dnf check-update
+dnf check-update &&
 sudo dnf install code
 ```
 
